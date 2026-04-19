@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>基础研发四部 AI 汇报稿制作过程回放</title>
+  <meta name="description" content="以静态对话页面回放基础研发四部 AI 使用调研汇报稿的制作全过程，包含问卷分析、PPT 搭建、页面迭代、旧代码理解方案深化与 GitHub 发布。">
+  <meta name="theme-color" content="#1b4d45">
+  <style>
+    :root {
+      --bg: #f4f6f3;
+      --bg-soft: #fbfcfa;
+      --panel: rgba(255, 255, 255, 0.78);
+      --panel-strong: rgba(255, 255, 255, 0.92);
+      --line: rgba(20, 45, 39, 0.08);
+      --line-strong: rgba(20, 45, 39, 0.18);
+      --ink: #18251f;
+      --muted: #62706a;
+      --brand: #1b4d45;
+      --brand-soft: rgba(27, 77, 69, 0.1);
+      --user: #1f2937;
+      --assistant: #edf7f4;
+      --note: #fff8ea;
+      --accent: #d48a42;
+      --shadow: 0 18px 42px rgba(20, 45, 39, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --sans: "Avenir Next", "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", "JetBrains Mono", "Consolas", monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(27, 77, 69, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(212, 138, 66, 0.12), transparent 24%),
+        linear-gradient(180deg, #f7faf7 0%, #f2f5f2 46%, #eef2ee 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.38), rgba(255,255,255,0)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(27, 77, 69, 0.025) 0 1px,
+          transparent 1px 44px
+        ),
+        repeating-linear-gradient(
+          180deg,
+          rgba(27, 77, 69, 0.02) 0 1px,
+          transparent 1px 44px
+        );
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 22px 72px;
+    }
+
+    .hero {
+      padding: 26px 28px 30px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.78));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.08;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 4.8vw, 4.5rem);
+      letter-spacing: -0.04em;
+      max-width: 11ch;
+    }
+
+    .hero p.lede {
+      margin: 16px 0 0;
+      max-width: 64ch;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(27, 77, 69, 0.08);
+      background: rgba(255,255,255,0.76);
+      color: var(--brand);
+      font-size: 0.9rem;
+    }
+
+    .hero-links {
+      display: grid;
+      gap: 10px;
+      min-width: 250px;
+    }
+
+    .link-card {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.78);
+    }
+
+    .link-card strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+
+    .link-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    .note-banner {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(255,248,234,0.95), rgba(255,248,234,0.72));
+      border: 1px solid rgba(212, 138, 66, 0.18);
+      color: #6b4c22;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+      align-items: start;
+    }
+
+    .rail {
+      position: sticky;
+      top: 20px;
+      padding: 18px 16px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 12px 30px rgba(20, 45, 39, 0.06);
+      backdrop-filter: blur(18px);
+    }
+
+    .rail h2 {
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--brand);
+      margin-bottom: 12px;
+    }
+
+    .rail ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .rail a {
+      display: block;
+      padding: 12px 12px 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.74);
+      border: 1px solid rgba(27, 77, 69, 0.06);
+      color: var(--ink);
+      line-height: 1.45;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .rail a:hover {
+      transform: translateY(-1px);
+      border-color: rgba(27, 77, 69, 0.18);
+      background: rgba(237, 247, 244, 0.96);
+    }
+
+    .rail .num {
+      display: block;
+      font-family: var(--mono);
+      color: var(--brand);
+      font-size: 0.78rem;
+      margin-bottom: 3px;
+    }
+
+    .rail .title {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .rail .sub {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .content {
+      display: grid;
+      gap: 22px;
+    }
+
+    .phase {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,0.74);
+      box-shadow: 0 14px 32px rgba(20, 45, 39, 0.06);
+      backdrop-filter: blur(16px);
+    }
+
+    .phase-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .phase-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(27, 77, 69, 0.12), rgba(27, 77, 69, 0.04));
+      color: var(--brand);
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      flex: none;
+    }
+
+    .phase-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .phase-copy h2 {
+      font-size: 1.55rem;
+      letter-spacing: -0.03em;
+    }
+
+    .phase-copy p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .phase-meta {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(27, 77, 69, 0.08);
+      color: var(--brand);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .chat-shell {
+      padding: 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(246,248,246,0.9), rgba(250,251,250,0.78));
+      border: 1px solid rgba(20, 45, 39, 0.06);
+      display: grid;
+      gap: 14px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .msg.user {
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      flex: none;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      letter-spacing: 0.03em;
+    }
+
+    .msg.user .avatar {
+      background: #1f2937;
+      color: #f8fafc;
+    }
+
+    .msg.assistant .avatar {
+      background: rgba(27, 77, 69, 0.12);
+      color: var(--brand);
+    }
+
+    .msg.note .avatar {
+      background: rgba(212, 138, 66, 0.14);
+      color: #8a5a1d;
+    }
+
+    .bubble-wrap {
+      max-width: min(82%, 780px);
+    }
+
+    .msg.user .bubble-wrap {
+      text-align: right;
+    }
+
+    .meta-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .msg.user .meta-line {
+      justify-content: flex-end;
+    }
+
+    .role-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .msg.user .role-badge {
+      background: rgba(31, 41, 55, 0.1);
+      color: #1f2937;
+    }
+
+    .msg.assistant .role-badge {
+      background: rgba(27, 77, 69, 0.1);
+      color: var(--brand);
+    }
+
+    .msg.note .role-badge {
+      background: rgba(212, 138, 66, 0.12);
+      color: #8a5a1d;
+    }
+
+    .bubble {
+      display: inline-block;
+      padding: 14px 16px;
+      border-radius: 18px;
+      line-height: 1.75;
+      text-align: left;
+      border: 1px solid transparent;
+      box-shadow: 0 8px 20px rgba(20, 45, 39, 0.04);
+    }
+
+    .msg.user .bubble {
+      background: var(--user);
+      color: #f8fafc;
+      border-top-right-radius: 8px;
+    }
+
+    .msg.assistant .bubble {
+      background: var(--assistant);
+      color: var(--ink);
+      border-color: rgba(27, 77, 69, 0.08);
+      border-top-left-radius: 8px;
+    }
+
+    .msg.note .bubble {
+      background: var(--note);
+      color: #6b4c22;
+      border-color: rgba(212, 138, 66, 0.16);
+      max-width: 100%;
+      border-radius: 16px;
+      box-shadow: none;
+    }
+
+    .bubble p {
+      margin: 0;
+    }
+
+    .bubble p + p {
+      margin-top: 8px;
+    }
+
+    .milestone {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, rgba(27, 77, 69, 0.08), rgba(27, 77, 69, 0.03));
+      border: 1px solid rgba(27, 77, 69, 0.08);
+      display: grid;
+      gap: 8px;
+    }
+
+    .milestone strong {
+      color: var(--brand);
+      font-size: 0.96rem;
+    }
+
+    .milestone p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .milestone-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .milestone-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(27, 77, 69, 0.08);
+      color: var(--brand);
+      font-size: 0.85rem;
+    }
+
+    footer {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.72);
+      color: var(--muted);
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .rail {
+        position: static;
+      }
+
+      .hero-top {
+        flex-direction: column;
+      }
+
+      .hero-links {
+        width: 100%;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 18px 14px 48px;
+      }
+
+      .hero,
+      .phase {
+        padding: 18px;
+      }
+
+      .bubble-wrap {
+        max-width: 100%;
+      }
+
+      .phase-head {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <span class="eyebrow">Conversation Replay</span>
+          <h1>基础研发四部 AI 汇报稿制作全过程回放</h1>
+          <p class="lede">这个页面把“从问卷分析，到 HTML 汇报稿生成，再到旧代码理解方案深化与 GitHub 发布”的关键对话，整理成适合交流会展示的静态聊天界面。为了便于领导快速理解过程，页面保留主要需求、关键迭代和交付节点，省略了重复刷新、局部确认等短消息。</p>
+          <div class="hero-meta">
+            <span class="chip">关键阶段：6 段</span>
+            <span class="chip">核心产物：11 页汇报稿</span>
+            <span class="chip">发布形态：GitHub Pages</span>
+          </div>
+        </div>
+        <div class="hero-links">
+          <a class="link-card" href="./index.html">
+            <strong>查看汇报稿</strong>
+            <span>打开当前目录下的 HTML deck，查看最终交付内容。</span>
+          </a>
+          <a class="link-card" href="https://liyongzheng666.github.io/fish-terminal-setup-guide-pages/decks/department-ai-survey-report/">
+            <strong>在线访问</strong>
+            <span>GitHub Pages 已发布版本，可在手机、平板或其他电脑上直接查看。</span>
+          </a>
+          <a class="link-card" href="https://github.com/liyongzheng666/fish-terminal-setup-guide-pages/tree/main/decks/department-ai-survey-report">
+            <strong>查看源码</strong>
+            <span>查看 deck 与本页对应的静态文件结构。</span>
+          </a>
+        </div>
+      </div>
+      <div class="note-banner">
+        <strong>展示建议：</strong>适合在交流会里作为“制作过程说明页”使用。可以先用这页讲清楚需求如何逐步收敛、内容如何迭代，再切换到最终汇报稿页面，展示成品。
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="rail">
+        <h2>阶段导航</h2>
+        <ol>
+          <li><a href="#phase-1"><span class="num">01</span><span class="title">问卷分析与汇报定位</span><span class="sub">从 CSV 到经理汇报大纲</span></a></li>
+          <li><a href="#phase-2"><span class="num">02</span><span class="title">HTML Deck 搭建</span><span class="sub">把内容做成可演示静态稿</span></a></li>
+          <li><a href="#phase-3"><span class="num">03</span><span class="title">视觉与版式迭代</span><span class="sub">反复打磨封面与整体风格</span></a></li>
+          <li><a href="#phase-4"><span class="num">04</span><span class="title">旧代码理解方案深化</span><span class="sub">从泛 AI 诉求收敛到知识库路径</span></a></li>
+          <li><a href="#phase-5"><span class="num">05</span><span class="title">发布到 GitHub</span><span class="sub">变成本地 / 在线都可访问的成果</span></a></li>
+          <li><a href="#phase-6"><span class="num">06</span><span class="title">过程回放页</span><span class="sub">把整个制作过程做成可展示页面</span></a></li>
+        </ol>
+      </aside>
+
+      <main class="content">
+        <section class="phase" id="phase-1">
+          <div class="phase-head">
+            <div class="phase-tag">01</div>
+            <div class="phase-copy">
+              <h2>问卷分析与汇报定位</h2>
+              <p>这一阶段的目标，是把一份调查问卷结果整理成面向部门经理的汇报框架，并严格围绕问卷原始内容做现状、亮点和待优化点分析。</p>
+            </div>
+            <div class="phase-meta">CSV → 大纲 → 逐页文案</div>
+          </div>
+          <div class="chat-shell">
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>起始需求</span></div>
+                <div class="bubble">
+                  <p>请根据部门 AI 使用情况调查问卷结果，整理一份可以向部门经理汇报的 PPT 大纲，要求内容严格按照调查问卷来，分析当前现状、做得好的方向以及需要亟待增强和优化的地方。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>分析路径</span></div>
+                <div class="bubble">
+                  <p>先读取问卷原始字段和答卷内容，核对题目结构、样本分布和多选题热点，再按“使用现状、优势方向、优先建设点”三条线重新归纳成汇报框架。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg note">
+              <div class="avatar">·</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Milestone</span><span>数据结构化后得到的核心结论</span></div>
+                <div class="bubble">
+                  <p>样本共 14 份，主体为内核 / C++ 研发；需求最集中在“阅读和解释陌生代码”“代码重构建议”“根据需求生成代码骨架”；主要顾虑集中在“上下文不足、结果不准、误导排查”。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>首版输出</span></div>
+                <div class="bubble">
+                  <p>给出 9 页经理汇报大纲，包括：样本画像、当前现状、工作重心、需求全景、优先落地场景、目前做得好的方向、亟待增强和优化的地方、汇总结论与建议。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>迭代要求</span></div>
+                <div class="bubble">
+                  <p>我看到大家还都给出了一些日常实践，请加到合适的 PPT 分页中，搞成逐页可汇报文案版本。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>深化输出</span></div>
+                <div class="bubble">
+                  <p>把开放题里的真实实践并进来，扩展成逐页可汇报文案：每页有标题、结论句、图表建议和口播逻辑，保证既能回到问卷，又能直接面对经理层汇报。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="milestone">
+            <strong>阶段产物</strong>
+            <p>完成从问卷数据到 9 页汇报框架的转译，并把“日常实践”从开放题中抽取出来，嵌入到逐页可汇报文案中。</p>
+          </div>
+        </section>
+
+        <section class="phase" id="phase-2">
+          <div class="phase-head">
+            <div class="phase-tag">02</div>
+            <div class="phase-copy">
+              <h2>HTML Deck 搭建</h2>
+              <p>在确定内容框架后，把文案变成一份可以在浏览器里直接演示的 HTML 汇报稿，同时保留 presenter notes 和后续迭代空间。</p>
+            </div>
+            <div class="phase-meta">文案 → 9 页 Deck</div>
+          </div>
+          <div class="chat-shell">
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>制作要求</span></div>
+                <div class="bubble">
+                  <p>希望把逐页文案做成 HTML PPT。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>制作策略</span></div>
+                <div class="bubble">
+                  <p>选择正式汇报感更强的 `weekly-report` 模板作为底板，再把问卷结论、逐页文案和 speaker notes 重新排成 9 页 HTML deck。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg note">
+              <div class="avatar">·</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Milestone</span><span>制作动作</span></div>
+                <div class="bubble">
+                  <p>新建 `decks/department-ai-survey-report/` 目录，落地 `index.html`、`style.css`，按页写入统计、开放题案例、讲稿备注和页码。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>交付方式</span></div>
+                <div class="bubble">
+                  <p>完成后直接在本地打开 Deck，支持方向键翻页、`N` 查看备注、`S` 打开 presenter 视图，方便快速进入“边看边改”的状态。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>预览需求</span></div>
+                <div class="bubble">
+                  <p>请在我本地打开，让我看一下效果。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>进入迭代</span></div>
+                <div class="bubble">
+                  <p>本地打开 Deck，开始围绕页面切换、封面排版、整体风格和标题口径做多轮迭代。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="milestone">
+            <strong>阶段产物</strong>
+            <p>形成第一版 HTML 汇报稿，并建立“本地直接预览 + 当场微调”的工作流。</p>
+            <div class="milestone-links">
+              <a href="./index.html">查看最终汇报稿</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="phase" id="phase-3">
+          <div class="phase-head">
+            <div class="phase-tag">03</div>
+            <div class="phase-copy">
+              <h2>视觉与版式迭代</h2>
+              <p>这一阶段主要围绕“领导观感”和“讲述节奏”做细节打磨，包括过渡动画、封面重排、整体块感减轻和标题口径统一。</p>
+            </div>
+            <div class="phase-meta">观感优化</div>
+          </div>
+          <div class="chat-shell">
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>视觉反馈</span></div>
+                <div class="bubble">
+                  <p>我想让切换页面时的风格更多样一些。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>动画策略</span></div>
+                <div class="bubble">
+                  <p>为不同页面配置不同的切页气质和入场动效，比如 `cover / glide / reveal / cards / spotlight / finale`，让汇报过程更有节奏感，但保持正式克制。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>封面反馈</span></div>
+                <div class="bubble">
+                  <p>第一页中的框框有重叠，让人看起来很难受；另外统计口径和样本主体也有重合。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>版式修复</span></div>
+                <div class="bubble">
+                  <p>把封面从“多个重卡片”改成更轻的无边框信息条，去掉重复统计信息和时间，让第一页更像真正的封面，只承担定位和开场作用。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>风格方向</span></div>
+                <div class="bubble">
+                  <p>后面那几页也改一下吧；字数不需要压，主要用于交流会，领导愿意看细节。另外标题口径统一一下。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>统一风格</span></div>
+                <div class="bubble">
+                  <p>统一收轻后续页面的区块样式，把厚重卡片感降下来；同时把页标题改成同一套交流会口径，让全篇更稳、更专业。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="milestone">
+            <strong>阶段产物</strong>
+            <p>Deck 从“能看”进一步变成“可正式展示”：封面更干净，后续页面更轻，标题口径统一，整体更适合交流会使用。</p>
+          </div>
+        </section>
+
+        <section class="phase" id="phase-4">
+          <div class="phase-head">
+            <div class="phase-tag">04</div>
+            <div class="phase-copy">
+              <h2>旧代码理解方案深化</h2>
+              <p>在基本汇报稿成型后，重点新增了“如何用 AI 解决老旧代码理解问题”的章节，并结合团队真实阶段把路径逐步收敛到“先做知识库地基”。</p>
+            </div>
+            <div class="phase-meta">方案深化</div>
+          </div>
+          <div class="chat-shell">
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>新增主题</span></div>
+                <div class="bubble">
+                  <p>为了实现老旧代码的理解，我们可以做些什么？当前环境是 Win10、纯内网，但已有 OpenAI 格式自部署模型。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>初始方案</span></div>
+                <div class="bubble">
+                  <p>提出“代码考古”思路：目标不是一次性还原作者想法，而是让 AI 基于代码结构、调用关系、日志、配置和历史痕迹做事实解释、设计意图推断与不确定点标注。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>技术追问</span></div>
+                <div class="bubble">
+                  <p>我们更想先搞定工具，需要一个读代码能力强一点的终端软件。另外是不是需要准备模块常见错误点、代码层级结构？希望展开，而且这些东西都要真正能落地。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>方法框架</span></div>
+                <div class="bubble">
+                  <p>明确指出：终端只是入口，真正决定效果的是模型层、代码情报层、证据检索层和知识沉淀层；并展开说明模块地图、代码层级结构、常见错误点清单、历史证据等结构化资产的重要性。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>阶段约束</span></div>
+                <div class="bubble">
+                  <p>我们并没有开发 Agent 的能力和人员，我想的是先把第十一页做好，搞一个好的地基，梳理出一个基本可用的知识库更符合我们当下的阶段。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>路径收敛</span></div>
+                <div class="bubble">
+                  <p>把后两页重构成：第 10 页先回答“为什么当前阶段先不做 Agent，而要先做知识库地基”；第 11 页再展开“这个知识库具体该准备什么、怎么开始做”，同时把 `终端 + Agent` 作为后续演进方向保留。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="milestone">
+            <strong>阶段产物</strong>
+            <p>新增并反复打磨了“旧代码理解”章节，最终形成了“当前先做知识库地基、未来再考虑终端 + Agent 工作台”的可落地路线。</p>
+          </div>
+        </section>
+
+        <section class="phase" id="phase-5">
+          <div class="phase-head">
+            <div class="phase-tag">05</div>
+            <div class="phase-copy">
+              <h2>发布到 GitHub</h2>
+              <p>为了实现“随时随设备查看”，在内容确认后将 deck 改造成仓库内自包含静态目录，并推送到 GitHub Pages。</p>
+            </div>
+            <div class="phase-meta">本地 → GitHub Pages</div>
+          </div>
+          <div class="chat-shell">
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>发布需求</span></div>
+                <div class="bubble">
+                  <p>想把这个内容先搞到 GitHub 上，可以随时随设备查看，请帮我完成。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>先做检查</span></div>
+                <div class="bubble">
+                  <p>先检查仓库 remote、当前分支、GitHub 身份以及 Pages 发布条件，然后确认 deck 的样式与运行时资源能否脱离本机环境独立工作。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg note">
+              <div class="avatar">·</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Milestone</span><span>发布前修正</span></div>
+                <div class="bubble">
+                  <p>发现 deck 目录里的 `assets` 是指向本机 `.codex` 路径的符号链接，如果直接推上 GitHub，外部设备将无法加载样式和交互。于是先将运行所需素材复制进仓库，确保 GitHub Pages 可独立运行。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>发布动作</span></div>
+                <div class="bubble">
+                  <p>将 `decks/department-ai-survey-report/` 整体提交到仓库，按 Lore 协议写提交信息，然后推送到 `main`。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg note">
+              <div class="avatar">·</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Milestone</span><span>发布结果</span></div>
+                <div class="bubble">
+                  <p>GitHub Pages 最新构建状态为 `built`，生成可直接访问的在线链接，方便在手机、平板和其他电脑上随时查看。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="milestone">
+            <strong>阶段产物</strong>
+            <p>HTML 汇报稿已作为自包含静态目录发布到 GitHub Pages，可跨设备访问。</p>
+            <div class="milestone-links">
+              <a href="https://liyongzheng666.github.io/fish-terminal-setup-guide-pages/decks/department-ai-survey-report/">汇报稿在线地址</a>
+              <a href="https://github.com/liyongzheng666/fish-terminal-setup-guide-pages/tree/main/decks/department-ai-survey-report">仓库目录</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="phase" id="phase-6">
+          <div class="phase-head">
+            <div class="phase-tag">06</div>
+            <div class="phase-copy">
+              <h2>过程回放页</h2>
+              <p>最后一个新增需求，是把整个制作过程本身也做成可展示的界面化网页，方便向领导回放“内容是如何一步步做出来的”。</p>
+            </div>
+            <div class="phase-meta">对话 → 静态页面</div>
+          </div>
+          <div class="chat-shell">
+            <article class="msg user">
+              <div class="avatar">U</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">User</span><span>最终新增需求</span></div>
+                <div class="bubble">
+                  <p>想把咱俩的对话渲染成带有界面的对话框静态网页，方便给领导展示制作上述内容的全过程。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>页面设计</span></div>
+                <div class="bubble">
+                  <p>决定用“阶段导航 + 聊天气泡 + 里程碑卡片”的形式，把关键对话、关键决策和关键产物集中在一个纯静态页面里，既能回放过程，也适合在交流会上直接展示。</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="msg assistant">
+              <div class="avatar">A</div>
+              <div class="bubble-wrap">
+                <div class="meta-line"><span class="role-badge">Assistant</span><span>落地方式</span></div>
+                <div class="bubble">
+                  <p>将本页加入 `decks/department-ai-survey-report/` 目录，保持自包含、无构建步骤、可本地打开，也可后续直接发布到 GitHub Pages。</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="milestone">
+            <strong>当前页面本身就是阶段产物</strong>
+            <p>它把“需求输入、内容生成、设计迭代、方案深化、发布上线”串成了一条完整可展示的制作链路。</p>
+            <div class="milestone-links">
+              <a href="./process-replay.html">当前页面</a>
+              <a href="./index.html">最终汇报稿</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      这个回放页用于说明“最终汇报稿是如何一步步做出来的”。如果后续还要继续迭代汇报内容，可以把新的关键对话继续追加到对应阶段，形成完整的项目制作档案。
+    </footer>
+  </div>
+</body>
+</html>
