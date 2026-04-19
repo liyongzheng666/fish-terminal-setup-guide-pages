@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>基础研发四部 AI 使用现状与提效机会分析</title>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/base.css">
+<link rel="stylesheet" href="assets/animations/animations.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="tpl-weekly-report">
+<div class="deck">
+
+  <section class="slide" data-title="封面" data-transition="cover">
+    <div class="cover-head">
+      <div class="logo">基础研发四部 AI 使用调研</div>
+    </div>
+    <p class="kicker" data-anim="fade-up">DEPARTMENT AI SURVEY</p>
+    <h1 class="h1 mt-s" data-anim="fade-up">基础研发四部 AI 使用现状<br>与提效机会分析</h1>
+    <p class="lede mt-m" data-anim="fade-up">基于基础研发四部 AI 使用情况调查问卷，从 <strong>当前现状</strong>、<strong>已有亮点</strong> 和 <strong>待优化方向</strong> 三个方面进行梳理，为后续试点推进和管理决策提供参考。</p>
+    <div class="cover-meta mt-l" data-anim="fade-up">
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">调研对象</span>
+        <strong>基础研发四部研发团队</strong>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">数据来源</span>
+        <strong>AI 使用情况调查问卷</strong>
+      </div>
+      <div class="cover-meta-item">
+        <span class="cover-meta-label">汇报重点</span>
+        <strong>试点优先级与推进建议</strong>
+      </div>
+    </div>
+    <div class="deck-footer"><span></span><span class="slide-number" data-current="1" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页先交代范围。</strong>今天这份汇报完全基于 4 月 15 日到 4 月 17 日回收的 14 份问卷，不做额外外推，所有结论都回到原始题目和开放题原话。</p>
+      <p><strong>汇报重点有三件事。</strong>第一，团队现在到底怎么在用 AI；第二，哪些方向已经有共识，也已经出现了真实实践；第三，下一步最值得优先投入和优化什么。</p>
+      <p><strong>因为样本几乎都来自内核 / C++ 研发，</strong>所以后面的结论主要服务于这类研发场景，尤其是旧代码理解、Bug 排查、重构和知识沉淀相关工作。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="样本与判断" data-transition="glide">
+    <p class="kicker">SAMPLE · HEADLINE</p>
+    <h2 class="h2">样本结构与统计说明</h2>
+    <div class="grid g4 mt-l" data-anim="stagger-list">
+      <div class="kpi"><div class="label">有效答卷</div><div class="value">14</div><div class="delta flat">全部纳入统计</div></div>
+      <div class="kpi good"><div class="label">纯内核 C++</div><div class="value">93%</div><div class="delta up">13 / 14</div></div>
+      <div class="kpi"><div class="label">内核 & 前端</div><div class="value">7%</div><div class="delta flat">1 / 14</div></div>
+      <div class="kpi"><div class="label">调研时间</div><div class="value">3天</div><div class="delta flat">04-15 至 04-17</div></div>
+    </div>
+    <div class="grid g2 mt-l" data-anim="fade-up">
+      <div class="summary-card">
+        <h3 class="h4">统计口径说明</h3>
+        <ul class="clean-list">
+          <li><strong>单选题</strong>按 14 份有效答卷统计，占比基于答卷总数。</li>
+          <li><strong>多选题</strong>按选择人数统计，同一答卷可对应多个选项。</li>
+          <li><strong>开放题</strong>只做观点归纳，不与选择题百分比直接比较。</li>
+        </ul>
+      </div>
+      <div class="summary-card emphasis">
+        <h3 class="h4">样本适用边界</h3>
+        <ul class="clean-list">
+          <li>本次结果主要反映 <strong>基础研发四部内核 / C++ 研发场景</strong>。</li>
+          <li>更适用于 <strong>Bug 修复、旧代码维护、技术调研、性能优化</strong> 类问题判断。</li>
+          <li>可作为后续 <strong>场景化试点</strong> 的一线样本依据。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span>本页仅说明样本与统计规则，避免与后续题目结果混读</span><span class="slide-number" data-current="2" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页先把样本边界说清楚。</strong>14 份答卷里有 13 份来自纯内核 C++ 岗位，所以这份报告主要反映的是内核研发团队对 AI 的使用现状和真实诉求。</p>
+      <p><strong>这里建议直接给出三个判断。</strong>第一，团队不是没在用 AI，而是已经开始用；第二，大家最关心的是看懂代码和理解上下文；第三，后续推进不要一开始铺太宽，而要围绕高频痛点做试点。</p>
+      <p><strong>这三点其实已经奠定了后面整份报告的逻辑。</strong>接下来每一页，基本都是在给这三个判断补证据。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="当前使用现状" data-transition="reveal">
+    <p class="kicker">CURRENT STATE</p>
+    <h2 class="h2">当前使用现状：已起步，但仍偏轻量</h2>
+    <div class="grid g4 mt-l" data-anim="stagger-list">
+      <div class="kpi"><div class="label">偶尔使用</div><div class="value">57%</div><div class="delta flat">8 / 14</div></div>
+      <div class="kpi good"><div class="label">经常使用</div><div class="value">29%</div><div class="delta up">4 / 14</div></div>
+      <div class="kpi good"><div class="label">已广泛用于 coding</div><div class="value">86%</div><div class="delta up">12 / 14</div></div>
+      <div class="kpi"><div class="label">用于学习 / 办公</div><div class="value">36%</div><div class="delta flat">5 / 14</div></div>
+    </div>
+    <div class="grid g2 mt-l">
+      <div class="summary-card" data-anim="fade-right">
+        <h3 class="h4">单选题结果：使用频率</h3>
+        <ul class="clean-list">
+          <li><strong>偶尔使用</strong> 为主，占 57%，说明团队已开始接触但尚未形成高频习惯。</li>
+          <li><strong>经常使用</strong> 占 29%，说明已有一部分同学进入稳定使用阶段。</li>
+          <li><strong>基本没用过 / 了解但很少用</strong> 共 14%，说明完全空白用户占比不高。</li>
+        </ul>
+      </div>
+      <div class="summary-card" data-anim="fade-left">
+        <h3 class="h4">多选题结果：当前应用环节</h3>
+        <ul class="clean-list">
+          <li><strong>coding</strong> 是当前最主要的应用环节，覆盖代码生成、调试、走查、缺陷调研等。</li>
+          <li><strong>学习 / 办公</strong> 与 <strong>文档理解 / 编写</strong> 也已有一定覆盖，但仍处于辅助角色。</li>
+          <li>两类题目分别回答“<strong>使用频率</strong>”与“<strong>使用在哪些环节</strong>”，不作横向对比。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deck-footer"><span>本页同时包含单选题与多选题结果，分别用于说明频率与应用覆盖</span><span class="slide-number" data-current="3" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这里想表达的重点不是“大家会不会用”，而是“大家已经在用”。</strong>问卷里没有出现明显的排斥情绪，反而能看到不少实际应用，只是频率上以偶尔使用为主。</p>
+      <p><strong>另一个关键信号是应用场景。</strong>目前最广泛的环节集中在 coding，说明 AI 已经进入研发主流程的边缘，而不只是聊天或者泛问答工具。</p>
+      <p><strong>但从频率和分布看，团队还没有进入稳定高频阶段。</strong>所以当前最合适的推进方式，不是要求所有人都立刻深度使用，而是先把最有价值的几个场景做深。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="日常实践" data-transition="cards">
+    <p class="kicker">REAL PRACTICE</p>
+    <h2 class="h2">AI 已经进入部分日常工作，且已有真实实践</h2>
+    <div class="practice-grid mt-l">
+      <div class="practice-card" data-anim="page-turn-3d">
+        <span class="pill">Coding 场景</span>
+        <h3 class="h4">已经在做的事情</h3>
+        <ul class="clean-list compact">
+          <li>生成注释</li>
+          <li>调研老代码、走查代码</li>
+          <li>编写代码之后让 AI 优化</li>
+          <li>算法代码分析</li>
+          <li>解析代码逻辑，查找相关算法</li>
+        </ul>
+      </div>
+      <div class="practice-card" data-anim="perspective-zoom" style="--anim-dur:.85s">
+        <span class="pill">文档场景</span>
+        <h3 class="h4">已经在做的事情</h3>
+        <ul class="clean-list compact">
+          <li>让 AI 优化表述</li>
+          <li>辅助需求文档和说明文案的整理</li>
+          <li>补充和整理说明性文本</li>
+        </ul>
+      </div>
+      <div class="practice-card" data-anim="card-flip-3d" style="--anim-dur:1s">
+        <span class="pill">学习 / 办公</span>
+        <h3 class="h4">已经在做的事情</h3>
+        <ul class="clean-list compact">
+          <li>翻译和查专业问题</li>
+          <li>问代码知识、语法知识</li>
+          <li>学习新知识和快速检索资料</li>
+        </ul>
+      </div>
+    </div>
+    <div class="takeaway mt-l">
+      <strong>结论：</strong>团队并不缺尝试意愿，当前更需要把这些分散的个人实践沉淀成可复制的方法和场景方案。
+    </div>
+    <div class="deck-footer"><span>问卷中的开放题已经给出了不少“可落地小场景”</span><span class="slide-number" data-current="4" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页建议把“实践感”讲出来。</strong>因为管理层最容易担心的一点，是这是不是只是大家口头上觉得 AI 有用。但从开放题能看到，很多同学已经把 AI 用在具体工作动作里了。</p>
+      <p><strong>这些实践目前有一个共同特点：</strong>都比较轻、比较快，通常是个人自发使用，比如生成注释、走查老代码、优化表述、问技术问题。</p>
+      <p><strong>这也是一个机会点。</strong>说明团队已经帮我们验证了一批小场景，接下来并不是从零设计，而是把这些分散经验系统化、工具化、团队化。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="工作重心与时间消耗" data-transition="analytics">
+    <p class="kicker">WORKLOAD · TIME COST</p>
+    <h2 class="h2">当前工作重心，决定了 AI 需求会集中在理解与排障</h2>
+    <div class="grid g2 mt-l">
+      <div class="bar-panel" data-anim="fade-right">
+        <div class="row" style="justify-content:space-between"><h3 class="h4">日常投入时间较多的工作</h3><span class="pill">按选择人数统计</span></div>
+        <div class="bar-list">
+          <div class="bar-row"><div class="label">Bug 修复(Win 环境)</div><div class="bar-track"><div class="bar-fill" style="--w:93%"></div></div><div class="value">13 / 14</div></div>
+          <div class="bar-row"><div class="label">新功能开发</div><div class="bar-track"><div class="bar-fill" style="--w:43%"></div></div><div class="value">6 / 14</div></div>
+          <div class="bar-row"><div class="label">重构和维护老代码</div><div class="bar-track"><div class="bar-fill" style="--w:43%"></div></div><div class="value">6 / 14</div></div>
+          <div class="bar-row"><div class="label">技术调研</div><div class="bar-track"><div class="bar-fill" style="--w:36%"></div></div><div class="value">5 / 14</div></div>
+          <div class="bar-row"><div class="label">性能优化</div><div class="bar-track"><div class="bar-fill" style="--w:36%"></div></div><div class="value">5 / 14</div></div>
+        </div>
+      </div>
+      <div class="bar-panel" data-anim="fade-left">
+        <div class="row" style="justify-content:space-between"><h3 class="h4">最希望 AI 节省的时间</h3><span class="pill">单选题结果</span></div>
+        <div class="bar-list">
+          <div class="bar-row"><div class="label">机械性编码时间</div><div class="bar-track"><div class="bar-fill accent-2" style="--w:36%"></div></div><div class="value">5 / 14</div></div>
+          <div class="bar-row"><div class="label">查资料和知识检索时间</div><div class="bar-track"><div class="bar-fill accent-2" style="--w:21%"></div></div><div class="value">3 / 14</div></div>
+          <div class="bar-row"><div class="label">写测试时间</div><div class="bar-track"><div class="bar-fill accent-2" style="--w:14%"></div></div><div class="value">2 / 14</div></div>
+          <div class="bar-row"><div class="label">排查问题时间</div><div class="bar-track"><div class="bar-fill accent-2" style="--w:14%"></div></div><div class="value">2 / 14</div></div>
+          <div class="bar-row"><div class="label">阅读代码时间</div><div class="bar-track"><div class="bar-fill accent-2" style="--w:14%"></div></div><div class="value">2 / 14</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway mt-l">
+      <strong>结论：</strong>团队的核心压力主要来自 Bug 修复、旧代码维护和技术理解，因此大家最需要的不是泛化回答，而是能直接降低理解成本、排障成本和重复劳动成本的 AI 能力。
+    </div>
+    <div class="deck-footer"><span>左侧为多选题，右侧为单选题，两者共同说明工作压力与节时诉求</span><span class="slide-number" data-current="5" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页是把“工作背景”和“AI 诉求”连起来讲。</strong>问卷显示，大家日常投入时间最多的是 Bug 修复，其次是新功能开发、旧代码维护、技术调研和性能优化。</p>
+      <p><strong>这类工作有一个共同点，</strong>就是对上下文理解、问题定位和经验判断的要求都很高。所以大家想让 AI 节省的，不只是写代码的时间，还包括查资料、写测试、排查问题和阅读代码的时间。</p>
+      <p><strong>这也是为什么后面的优先需求会集中在代码理解和排障。</strong>这不是偶然，而是由当前工作结构决定的。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="需求优先级" data-transition="spotlight">
+    <p class="kicker">DEMAND LANDSCAPE</p>
+    <h2 class="h2">同口径看需求优先级：代码理解最突出</h2>
+    <div class="bar-panel mt-l" data-anim="spotlight">
+      <div class="row" style="justify-content:space-between"><h3 class="h4">最希望 AI 助力提效的环节</h3><span class="pill">多选题 · Top 6</span></div>
+      <div class="bar-list">
+        <div class="bar-row"><div class="label">阅读和解释陌生代码</div><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div><div class="value">14 / 14</div></div>
+        <div class="bar-row"><div class="label">根据需求生成代码骨架</div><div class="bar-track"><div class="bar-fill" style="--w:64%"></div></div><div class="value">9 / 14</div></div>
+        <div class="bar-row"><div class="label">代码重构建议</div><div class="bar-track"><div class="bar-fill" style="--w:57%"></div></div><div class="value">8 / 14</div></div>
+        <div class="bar-row"><div class="label">文档 / 注释生成</div><div class="bar-track"><div class="bar-fill" style="--w:36%"></div></div><div class="value">5 / 14</div></div>
+        <div class="bar-row"><div class="label">问题定位与日志定位</div><div class="bar-track"><div class="bar-fill" style="--w:36%"></div></div><div class="value">5 / 14</div></div>
+        <div class="bar-row"><div class="label">代码调试辅助</div><div class="bar-track"><div class="bar-fill" style="--w:29%"></div></div><div class="value">4 / 14</div></div>
+      </div>
+    </div>
+    <div class="priority-grid mt-l" data-anim="stagger-list">
+      <div class="priority-card"><div class="rank">01</div><h3 class="h4">阅读和解释陌生代码</h3><p>若只能优先落地 3 个场景，该项获得 12 / 14 选择，占 86%。</p></div>
+      <div class="priority-card"><div class="rank">02</div><h3 class="h4">代码重构建议</h3><p>获得 8 / 14 选择，占 57%，说明大家希望 AI 帮忙优化而不是盲目替代。</p></div>
+      <div class="priority-card"><div class="rank">03</div><h3 class="h4">根据需求生成代码骨架</h3><p>获得 5 / 14 选择，占 36%，更适合作为规则明确的提效场景。</p></div>
+    </div>
+    <div class="deck-footer"><span>左侧为多选题，右侧为“最多选择 3 项”的优先级题，均用于判断需求排序</span><span class="slide-number" data-current="6" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页是整份报告最关键的一页。</strong>如果经理只记住一个结论，我建议就是这页的标题：最强需求不是“多写代码”，而是“看懂代码”。</p>
+      <p><strong>数据非常集中。</strong>在“最希望 AI 助力提效”的题目里，阅读和解释陌生代码是 14 个人全部选择；在“只能优先落地 3 个场景”的题目里，它依然是第一。</p>
+      <p><strong>这说明后续试点范围其实已经很清楚。</strong>先把代码理解、重构建议、骨架生成这三个方向做好，比一开始铺很多零散能力更有价值。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="做得好的方向" data-transition="quotes">
+    <p class="kicker">WHAT IS ALREADY WORKING</p>
+    <h2 class="h2">已有推进基础：以开放题和综合反馈为主</h2>
+    <div class="grid g2 mt-l">
+      <div class="summary-stack" data-anim="fade-right">
+        <div class="summary-card">
+          <h3 class="h4">方向已经很清晰</h3>
+          <p class="dim">开放题里反复出现的关键词，是看懂旧功能、梳理框架、分析老算法、解析原始代码逻辑。</p>
+        </div>
+        <div class="summary-card">
+          <h3 class="h4">接入方式高度统一</h3>
+          <p class="dim">从问卷整体反馈看，团队更偏好通过 IDE 插件接入，工具形态分歧较小。</p>
+        </div>
+        <div class="summary-card">
+          <h3 class="h4">试点基础较好</h3>
+          <p class="dim">从参与意愿看，整体态度偏开放，适合先做小范围场景化试点再逐步推广。</p>
+        </div>
+      </div>
+      <div class="quote-grid" data-anim="stagger-list">
+        <div class="quote-card"><p>帮助看懂旧功能，梳理其框架</p><span>开放题原话</span></div>
+        <div class="quote-card"><p>帮助看懂老算法代码</p><span>开放题原话</span></div>
+        <div class="quote-card"><p>结合上下文解析原始代码</p><span>开放题原话</span></div>
+        <div class="quote-card"><p>排查性能问题并给出方案</p><span>开放题原话</span></div>
+      </div>
+    </div>
+    <div class="takeaway mt-l">
+      <strong>结论：</strong>本页不再重复前述统计结果，重点说明开放题和综合反馈中已经显现出的共识方向，为后续试点选择提供定性依据。
+    </div>
+    <div class="deck-footer"><span>本页以开放题与综合反馈为主，不与前页统计结果直接比较</span><span class="slide-number" data-current="7" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页建议从“为什么现在适合推进”这个角度来讲。</strong>因为问卷不只是告诉我们大家想要什么，还告诉我们哪些方向已经形成共识，哪些形态更容易被接受。</p>
+      <p><strong>这里可以重点强调两点。</strong>第一，方向已经很清晰，开放题里大量问题都围绕旧代码理解和逻辑梳理；第二，工具入口也已经清晰，IDE 插件几乎是一边倒的偏好。</p>
+      <p><strong>再加上试点意愿本身不低，</strong>所以从推进时机看，现在做小范围场景化试点是合适的。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="亟待优化" data-transition="alert">
+    <p class="kicker">KEY GAPS</p>
+    <h2 class="h2">亟待增强和优化的地方：主矛盾在可信度，不在入口</h2>
+    <div class="grid g2 mt-l">
+      <div data-anim="fade-right">
+        <div class="blocker">
+          <h4>不理解业务上下文 · 10 / 14（71%）</h4>
+          <p>这是当前最突出的顾虑。说明如果 AI 无法结合代码库、模块职责和业务背景，就很难真正进入研发主流程。</p>
+          <div class="meta">需要补足：代码上下文、模块说明、内部知识</div>
+        </div>
+        <div class="blocker">
+          <h4>结果不准确 · 9 / 14（64%）</h4>
+          <p>团队担心答案看起来“像对的”，但并不可靠，因此更适合先在可校验、可回溯的场景中推进。</p>
+          <div class="meta">建议优先：代码理解、注释生成、骨架生成等可验证任务</div>
+        </div>
+        <div class="blocker">
+          <h4>容易误导排查方向 · 8 / 14（57%）</h4>
+          <p>在 Bug 排查和问题定位场景里，一旦误导方向，时间成本可能比不用 AI 更高。</p>
+          <div class="meta">需要机制：人审、交叉验证、结果留痕</div>
+        </div>
+      </div>
+      <div class="summary-stack" data-anim="fade-left">
+        <div class="summary-card">
+          <h3 class="h4">次级顾虑</h3>
+          <ul class="clean-list">
+            <li>学习成本高：4 / 14（29%）</li>
+            <li>生成代码质量不稳定：4 / 14（29%）</li>
+            <li>责任边界不清、接入使用麻烦：各 1 / 14</li>
+          </ul>
+        </div>
+        <div class="summary-card emphasis">
+          <h3 class="h4">管理层可抓的重点</h3>
+          <ul class="clean-list">
+            <li>先补 <strong>上下文</strong>，不要只给一个通用聊天入口。</li>
+            <li>先做 <strong>可信场景</strong>，不要一开始押重度自动化排障。</li>
+            <li>给出 <strong>使用规范</strong>，让 AI 输出能被复核、能被追踪。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="deck-footer"><span>当前真正制约推广的不是“有没有工具”，而是“能不能信”</span><span class="slide-number" data-current="8" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页建议明确告诉经理层，当前最大的阻碍不是入口问题。</strong>从问卷看，大家并不排斥使用，也不缺工具入口，真正的问题是输出是否可靠。</p>
+      <p><strong>三个高频顾虑连起来其实是一件事：</strong>不理解上下文，导致结果不够准，进一步就可能误导排查方向。所以主矛盾本质上是可信度问题。</p>
+      <p><strong>这也决定了推进策略。</strong>我们应该优先做那些更容易校验、更容易积累上下文的场景，而不是一开始就让 AI 在高风险排障场景里“自主发挥”。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="建议与下一步" data-transition="finale">
+    <p class="kicker">RECOMMENDATION · NEXT STEP</p>
+    <h2 class="h2">围绕旧代码理解，建议先做小范围试点</h2>
+    <div class="mt-l" style="max-width:1040px" data-anim="stagger-list">
+      <div class="next-row"><div class="owner">试点 1</div><div class="task"><b>文件 / 函数级旧代码解释</b><span>先解决“这段代码在做什么、输入输出是什么、关键分支是什么”这类最基础但最高频的问题</span></div></div>
+      <div class="next-row"><div class="owner">试点 2</div><div class="task"><b>模块摘要 + 调用链梳理</b><span>帮助研发快速看懂老功能从哪里进来、依赖谁、影响谁，降低接手和排查成本</span></div></div>
+      <div class="next-row"><div class="owner">试点 3</div><div class="task"><b>常见故障点与风险提示</b><span>围绕老模块沉淀错误现象、优先排查点和常见误判，辅助做问题定位而不是直接改代码</span></div></div>
+      <div class="next-row"><div class="owner">接入</div><div class="task"><b>优先走 IDE 插件</b><span>结合问卷反馈，这一入口更贴近日常研发工作流，也更容易推动落地</span></div></div>
+      <div class="next-row"><div class="owner">衡量</div><div class="task"><b>看读码耗时、交接效率、定位速度</b><span>不以“调用次数”作为唯一指标，而看是否真正降低理解旧代码和接手老模块的成本</span></div></div>
+    </div>
+    <div class="closing-card mt-l" data-anim="zoom-pop">
+      <p class="closing-title">承接后续两页</p>
+      <p class="closing-text">如果下一阶段聚焦 <strong>旧代码理解</strong>，那后面真正要回答的就是两件事：<strong>当前阶段为什么要先做知识库地基</strong>，以及 <strong>这个知识库要怎么做成基础可用</strong>。</p>
+    </div>
+    <div class="deck-footer"><span>这一页提出方向，后两页展开回答“具体怎么落地”</span><span class="slide-number" data-current="9" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页不要当成整份汇报的终点，</strong>而要当成一个承接页。前面我们已经说明了为什么旧代码理解最值得优先做，这一页就是把方向先收出来。</p>
+      <p><strong>这里的 3 个试点建议也尽量聚焦。</strong>第一步先解决文件和函数级解释，第二步做模块摘要和调用链梳理，第三步再进入常见故障点和风险提示。</p>
+      <p><strong>这样后面两页就顺了。</strong>第十页先说明为什么当前阶段不宜先做 Agent，而应先做知识库地基；第十一页再展开这个知识库到底要准备什么、怎么开始做。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="当前阶段判断" data-transition="reveal">
+    <p class="kicker">STAGE JUDGMENT</p>
+    <h2 class="h2">当前阶段更适合先做知识库地基，而不是先做 Agent</h2>
+    <div class="grid g2 mt-l">
+      <div class="summary-stack" data-anim="fade-right">
+        <div class="summary-card">
+          <h3 class="h4">为什么当前不宜把重点放在 Agent 上</h3>
+          <ul class="clean-list">
+            <li>目前缺少专门开发 Agent 的人力和持续维护能力，直接上复杂编排风险较高。</li>
+            <li>如果没有模块知识、错误经验和历史证据，Agent 只能做表面解释，很难真正看懂老代码。</li>
+            <li>在老旧代码场景里，决定效果的往往不是“壳子”，而是背后的上下文质量。</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3 class="h4">当前阶段更现实的目标</h3>
+          <ul class="clean-list">
+            <li>先把旧代码相关知识整理成 <strong>可检索、可更新、可被模型消费</strong> 的内部知识库。</li>
+            <li>先支持“问得到、查得到、解释得出来”，再考虑复杂的自动编排和多 Agent。</li>
+            <li>先把最痛的 1 到 2 个老模块梳理清楚，比一开始铺全局平台更务实。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="summary-stack" data-anim="fade-left">
+        <div class="summary-card emphasis">
+          <h3 class="h4">结合现有条件，最小可行路径已经具备</h3>
+          <ul class="clean-list">
+            <li><strong>环境：</strong>Win10 + 纯内网，天然适合走内网知识库方案。</li>
+            <li><strong>模型：</strong>已有 OpenAI 格式自部署模型，可直接作为问答和总结能力底座。</li>
+            <li><strong>入口：</strong>前期不必自研复杂 Agent 平台，先用简单终端 / IDE 查询入口即可。</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3 class="h4">当前阶段真正要先做出来的能力</h3>
+          <ul class="clean-list">
+            <li>模块职责、关键流程、常见故障、历史改动这些信息能被问到、查到、引用到。</li>
+            <li>现有模型基于知识库先完成解释、摘要、问答、候选推断等轻量能力。</li>
+            <li>等知识库足够可用后，再决定是否值得往 Agent 和自动化方向继续投入。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway mt-l">
+      <strong>结论：</strong>对当前阶段来说，最优解不是先做一个复杂 Agent，而是先把 <strong>旧代码知识库</strong> 做成可用地基，再让现有模型基于这层地基发挥作用。
+    </div>
+    <div class="deck-footer"><span>这一页回答“为什么当前阶段要先做知识库地基”</span><span class="slide-number" data-current="10" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页的核心不是否定 Agent，</strong>而是说明在当前人力和阶段下，先做 Agent 并不是最优投入方向。</p>
+      <p><strong>如果领导追问为什么，</strong>就直接讲两点：第一，没有足够知识底座时，Agent 只是外壳；第二，复杂编排需要持续投入，而你们当前更缺的是老代码上下文本身。</p>
+      <p><strong>所以这一页要得出的结论是：</strong>先把知识库地基做出来，用现有模型把解释、摘要、问答先跑通，后面再评估是否值得继续做 Agent。</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="知识底座准备什么" data-transition="finale">
+    <p class="kicker">KNOWLEDGE BASE</p>
+    <h2 class="h2">现阶段更值得投入的事：把旧代码知识库做成基础可用</h2>
+    <div class="grid g2 mt-l">
+      <div class="summary-stack" data-anim="fade-right">
+        <div class="summary-card">
+          <h3 class="h4">必须先准备的 4 类资产</h3>
+          <ul class="clean-list">
+            <li><strong>模块地图：</strong>目录范围、职责、入口、关键结构、上下游依赖。</li>
+            <li><strong>代码层级结构：</strong>接口层、流程层、算法层、适配层、配置层、日志层。</li>
+            <li><strong>常见错误点清单：</strong>错误现象、触发条件、先看哪里、常见误判、修复注意事项。</li>
+            <li><strong>历史证据：</strong>git 变更、相似实现、旧版行为、配置差异、典型日志。</li>
+          </ul>
+        </div>
+        <div class="summary-card emphasis">
+          <h3 class="h4">为什么这些东西必须要有</h3>
+          <ul class="clean-list">
+            <li>老代码的设计意图往往已经不在“人”那里，而散落在代码结构和历史痕迹里。</li>
+            <li>AI 只有拿到这些结构化上下文，才有可能从“解释代码”升级到“推断意图”。</li>
+            <li>这不是写文档，而是在建设 <strong>AI 可消费的工程上下文</strong>。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="summary-stack" data-anim="fade-left">
+        <div class="summary-card">
+          <h3 class="h4">建议的数据结构长什么样</h3>
+          <ul class="clean-list">
+            <li><strong>模块卡：</strong>模块职责、关键入口、核心流程、关键配置、主要风险点。</li>
+            <li><strong>错误卡：</strong>现象、日志、错误码、优先排查文件、常见根因、误判点。</li>
+            <li><strong>流程卡：</strong>某功能从入口到输出的关键路径与关键节点。</li>
+            <li><strong>配置卡：</strong>宏开关、环境差异、行为分叉点。</li>
+          </ul>
+        </div>
+        <div class="summary-card">
+          <h3 class="h4">建议怎么开始，并为后续演进预留空间</h3>
+          <ul class="clean-list">
+            <li>先挑 <strong>1-2 个老模块</strong>，围绕代码理解和常见故障做试点。</li>
+            <li>优先补 <strong>最常接手、最常排障、最晦涩</strong> 的区域。</li>
+            <li>第一阶段先用 <strong>简单终端 / IDE 查询入口 + 现有模型</strong> 完成问答、解释、摘要等轻量能力。</li>
+            <li>每次读码、排障、重构结束后，把结论反向沉淀为模块卡和错误卡。</li>
+            <li>等知识库足够稳定后，再评估是否值得演进到 <strong>终端 + Agent</strong> 的代码理解工作台。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="closing-card mt-l" data-anim="zoom-pop">
+      <p class="closing-title">补充建议</p>
+      <p class="closing-text">对你们来说，当前最务实的目标不是“大而全”，而是先梳理出一个 <strong>基本可用的旧代码知识库</strong>；这层地基稳定后，再逐步演进到 <strong>终端 + 模型 + Agent</strong> 的代码理解工作台，会更稳、更可落地。</p>
+    </div>
+    <div class="deck-footer"><span>这一页回答“这个知识库具体该准备什么、怎么开始做”</span><span class="slide-number" data-current="11" data-total="11"></span></div>
+    <aside class="notes">
+      <p><strong>这一页就是把“地基”讲实。</strong>既然当前阶段决定先不做复杂 Agent，那这一页就要明确告诉领导，知识库不是泛泛写文档，而是要沉淀哪些具体资产。</p>
+      <p><strong>建议直接说 4 类：</strong>模块地图、代码层级结构、常见错误点清单、历史证据。再补一句，这些是为了让现有模型能真正围绕老代码做解释和推断。</p>
+      <p><strong>同时把后续方向也留住。</strong>可以明确讲，终端和 Agent 不是不要做，而是放在下一阶段：等知识库基础可用后，再往代码考古 Agent、调用链 Agent、故障经验 Agent 这些能力演进。</p>
+    </aside>
+  </section>
+
+</div>
+<script src="assets/runtime.js"></script>
+</body>
+</html>
