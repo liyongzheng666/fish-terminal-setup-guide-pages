@@ -1,6 +1,11 @@
-# Fish Terminal Setup Guide Pages
+# Terminal Guide Pages
 
-基于 [`liyongzheng666/Terminal-setup`](https://github.com/liyongzheng666/Terminal-setup) 的 Fish 技术选型整理出的静态速查页，重点覆盖：
+这个仓库用于发布轻量静态学习页，目前包含两条路线：
+
+- [`index.html`](index.html)：基于 [`liyongzheng666/Terminal-setup`](https://github.com/liyongzheng666/Terminal-setup) 的 Fish 技术选型速查页。
+- [`codex-terminal-skills/index.html`](codex-terminal-skills/index.html)：系统学习 Codex 终端常见命令、oh-my-codex 工作流与 Skill 调用技巧的路线图。
+
+Fish 页面重点覆盖：
 
 - Fish 原生交互
 - fzf 键盘集成
@@ -9,7 +14,10 @@
 
 ## 本地预览
 
-直接打开 `index.html` 即可。
+直接打开对应 HTML 文件即可：
+
+- `index.html`
+- `codex-terminal-skills/index.html`
 
 ## 发布形态
 
@@ -20,5 +28,6 @@
 
 ## 文件结构
 
-- `index.html`: 主页面
+- `index.html`: Fish Terminal Setup 快捷键图鉴
+- `codex-terminal-skills/index.html`: Codex 终端与 Skill 系统学习路线
 - `.nojekyll`: 禁用 Jekyll，按纯静态站点发布

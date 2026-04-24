@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codex 终端与 Skill 系统学习路线</title>
+  <meta name="description" content="一页系统学习 Codex CLI、oh-my-codex 命令与 Skill 调用技巧的路线图，包含命令速查、练习计划、提示词模板和避坑清单。">
+  <meta name="theme-color" content="#101828">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-2: #11182c;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.13);
+      --line: rgba(255, 255, 255, 0.16);
+      --line-strong: rgba(255, 255, 255, 0.28);
+      --text: #f5f7fb;
+      --muted: #b7c0d8;
+      --soft: #dbe4ff;
+      --blue: #79a7ff;
+      --cyan: #62e3ff;
+      --green: #85f5b9;
+      --amber: #ffd27a;
+      --rose: #ff8fa3;
+      --purple: #c8a5ff;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --radius-xl: 32px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+      --sans: "Inter", "Avenir Next", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at 7% 8%, rgba(98, 227, 255, 0.2), transparent 24%),
+        radial-gradient(circle at 86% 4%, rgba(200, 165, 255, 0.22), transparent 23%),
+        radial-gradient(circle at 70% 70%, rgba(133, 245, 185, 0.12), transparent 28%),
+        linear-gradient(135deg, #080b16 0%, #101828 44%, #12162a 100%);
+      line-height: 1.65;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 80%);
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    code,
+    .kbd,
+    .chip,
+    .badge,
+    .command-title,
+    .copy-button,
+    .filter-button,
+    .checklist input + span::before {
+      font-family: var(--mono);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 20px 74px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(11, 16, 32, 0.72);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(135deg, var(--cyan), var(--blue) 52%, var(--purple));
+      color: #071020;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38), 0 10px 28px rgba(98, 227, 255, 0.22);
+    }
+
+    .brand-copy strong,
+    .brand-copy span {
+      display: block;
+    }
+
+    .brand-copy strong {
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span {
+      max-width: 38ch;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav a {
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--soft);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: 180ms ease;
+    }
+
+    .nav a:hover {
+      border-color: rgba(98, 227, 255, 0.48);
+      background: rgba(98, 227, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-copy,
+    .hero-side,
+    .section {
+      padding: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border: 1px solid rgba(98, 227, 255, 0.36);
+      border-radius: 999px;
+      background: rgba(98, 227, 255, 0.1);
+      color: var(--cyan);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin-top: 18px;
+      font-size: clamp(3rem, 7vw, 6.6rem);
+      letter-spacing: -0.08em;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      letter-spacing: -0.055em;
+    }
+
+    h3 {
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 12px 0 0;
+      color: var(--muted);
+    }
+
+    .hero-copy p {
+      max-width: 64ch;
+      font-size: 1.04rem;
+    }
+
+    code {
+      padding: 0.08rem 0.34rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.22);
+      color: #eef4ff;
+      font-size: 0.92em;
+    }
+
+    .hero-actions,
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-actions {
+      margin-top: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text);
+      text-decoration: none;
+      transition: 180ms ease;
+    }
+
+    .button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #061124;
+      font-weight: 800;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .score-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: var(--radius-lg);
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .score-number {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--green);
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    .score-card strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .score-card span {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .section-head p {
+      max-width: 64ch;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .card.accent-blue {
+      background: linear-gradient(180deg, rgba(121, 167, 255, 0.16), rgba(255, 255, 255, 0.055));
+    }
+
+    .card.accent-green {
+      background: linear-gradient(180deg, rgba(133, 245, 185, 0.14), rgba(255, 255, 255, 0.055));
+    }
+
+    .card.accent-amber {
+      background: linear-gradient(180deg, rgba(255, 210, 122, 0.14), rgba(255, 255, 255, 0.055));
+    }
+
+    .card.accent-purple {
+      background: linear-gradient(180deg, rgba(200, 165, 255, 0.15), rgba(255, 255, 255, 0.055));
+    }
+
+    .card h3 {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--soft);
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .chip-row {
+      margin-top: 14px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.16);
+      color: var(--soft);
+      font-size: 0.84rem;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      counter-reset: week;
+    }
+
+    .week {
+      position: relative;
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 14px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.055);
+      counter-increment: week;
+    }
+
+    .week::before {
+      content: "Week " counter(week);
+      display: grid;
+      place-items: center;
+      min-height: 82px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(98, 227, 255, 0.2), rgba(121, 167, 255, 0.15));
+      color: var(--cyan);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .week ul,
+    .card ul,
+    .skill-card ul {
+      margin: 10px 0 0;
+      padding-left: 1.15rem;
+      color: var(--muted);
+    }
+
+    .week li,
+    .card li,
+    .skill-card li {
+      margin: 5px 0;
+    }
+
+    .command-lab {
+      display: grid;
+      gap: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      background: rgba(0, 0, 0, 0.16);
+    }
+
+    .search {
+      min-width: min(100%, 330px);
+      flex: 1;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      padding: 12px 16px;
+    }
+
+    .search::placeholder {
+      color: rgba(219, 228, 255, 0.55);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-button {
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--soft);
+      padding: 10px 12px;
+      transition: 150ms ease;
+    }
+
+    .filter-button.active,
+    .filter-button:hover {
+      border-color: rgba(98, 227, 255, 0.44);
+      background: rgba(98, 227, 255, 0.13);
+      color: white;
+    }
+
+    .command-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .command-card {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .command-card.hidden {
+      display: none;
+    }
+
+    .command-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .command-title {
+      color: var(--green);
+      font-size: 0.95rem;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .copy-button {
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--soft);
+      padding: 7px 9px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+
+    .copy-button.copied {
+      border-color: rgba(133, 245, 185, 0.52);
+      color: var(--green);
+    }
+
+    .command-card p {
+      margin-top: 0;
+      font-size: 0.94rem;
+    }
+
+    .command-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .skill-card {
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .skill-name {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .skill-name strong {
+      color: var(--cyan);
+      font-family: var(--mono);
+    }
+
+    .prompt-box {
+      position: relative;
+      margin-top: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: var(--radius-md);
+      background: rgba(0, 0, 0, 0.22);
+      color: #eef4ff;
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    .matrix th,
+    .matrix td {
+      padding: 13px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .matrix th {
+      color: white;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.9rem;
+    }
+
+    .matrix tr:last-child td {
+      border-bottom: none;
+    }
+
+    .matrix td {
+      color: var(--muted);
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .checklist label {
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.055);
+      color: var(--muted);
+    }
+
+    .checklist input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .checklist input + span::before {
+      content: "□";
+      display: inline-block;
+      margin-right: 8px;
+      color: var(--cyan);
+      font-weight: 800;
+    }
+
+    .checklist input:checked + span {
+      color: var(--green);
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(133, 245, 185, 0.56);
+    }
+
+    .checklist input:checked + span::before {
+      content: "✓";
+      color: var(--green);
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding: 22px 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer strong {
+      color: var(--soft);
+    }
+
+    @media (max-width: 980px) {
+      .topbar,
+      .hero,
+      .section-head {
+        display: block;
+      }
+
+      .nav {
+        justify-content: flex-start;
+        margin-top: 12px;
+      }
+
+      .hero-side {
+        margin-top: 18px;
+      }
+
+      .grid.cols-2,
+      .grid.cols-3,
+      .grid.cols-4,
+      .command-grid,
+      .skill-grid,
+      .checklist {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        padding: 14px 12px 44px;
+      }
+
+      .topbar {
+        border-radius: 24px;
+      }
+
+      .hero-copy,
+      .hero-side,
+      .section {
+        padding: 20px;
+      }
+
+      h1 {
+        max-width: none;
+      }
+
+      .week {
+        grid-template-columns: 1fr;
+      }
+
+      .week::before {
+        min-height: 56px;
+      }
+
+      .matrix {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="返回顶部">
+        <span class="brand-mark">C⌘</span>
+        <span class="brand-copy">
+          <strong>Codex Learning Map</strong>
+          <span>终端命令、OMX 工作流与 Skill 调用路线</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#method">学习法</a>
+        <a href="#roadmap">6 周路线</a>
+        <a href="#commands">命令速查</a>
+        <a href="#skills">Skill 技巧</a>
+        <a href="#practice">练习清单</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <article class="panel hero-copy">
+          <div class="eyebrow">2026-04-24 本机 Codex / OMX 帮助整理</div>
+          <h1>系统学 Codex 终端</h1>
+          <p>
+            不要从“背命令”开始。更快的路线是先建立心智模型：Codex 终端 = <strong>交互会话</strong>、
+            <strong>非交互执行</strong>、<strong>安全边界</strong>、<strong>MCP/插件</strong>、<strong>Skill 工作流</strong>、
+            <strong>Git 验证闭环</strong>。命令只是入口，真正的能力来自“给清楚目标 + 选对工作流 + 验证结果”。
+          </p>
+          <p>
+            这页把常见命令、oh-my-codex 的工作流入口、Skill 调用技巧和练习任务放在一起。
+            你可以照着 6 周路线走，也可以把它当成日常速查表。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#roadmap">从路线图开始</a>
+            <a class="button" href="#commands">直接查命令</a>
+            <a class="button" href="#skills">学习 Skill 调用</a>
+          </div>
+          <div class="chip-row">
+            <span class="chip">先用 <code>codex --help</code> 建地图</span>
+            <span class="chip">再用 <code>$plan</code> 降低歧义</span>
+            <span class="chip">最后用测试 / diff / review 闭环</span>
+          </div>
+        </article>
+
+        <aside class="panel hero-side" aria-label="学习阶段摘要">
+          <div class="score-card">
+            <div class="score-number">1</div>
+            <div>
+              <strong>会话层</strong>
+              <span>知道什么时候开交互式 Codex，什么时候用 <code>codex exec</code> 一次性完成。</span>
+            </div>
+          </div>
+          <div class="score-card">
+            <div class="score-number">2</div>
+            <div>
+              <strong>安全层</strong>
+              <span>理解 <code>--sandbox</code>、<code>--ask-for-approval</code>、<code>--full-auto</code> 的取舍。</span>
+            </div>
+          </div>
+          <div class="score-card">
+            <div class="score-number">3</div>
+            <div>
+              <strong>Skill 层</strong>
+              <span>用 <code>$plan</code>、<code>$code-review</code>、<code>$web-clone</code> 等工作流把任务分型。</span>
+            </div>
+          </div>
+          <div class="score-card">
+            <div class="score-number">4</div>
+            <div>
+              <strong>验证层</strong>
+              <span>每次交付都能说清楚改了什么、测了什么、还剩什么风险。</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel section" id="method">
+        <div class="section-head">
+          <div>
+            <span class="badge">Learning Method</span>
+            <h2>学习顺序：先场景，后命令</h2>
+          </div>
+          <p>把 Codex 当成“会使用工具的结对工程师”，而不是单纯聊天框。每学一个命令，都立刻绑定一个真实场景。</p>
+        </div>
+        <div class="grid cols-4">
+          <article class="card accent-blue">
+            <h3>① 建立地图</h3>
+            <p>运行 <code>codex --help</code>、<code>codex exec --help</code>、<code>omx --help</code>，先知道入口有哪些。</p>
+          </article>
+          <article class="card accent-green">
+            <h3>② 小任务实战</h3>
+            <p>从“解释一个文件”“修一个小 bug”“生成一页文档”开始，不要一上来做大型自动化。</p>
+          </article>
+          <article class="card accent-amber">
+            <h3>③ 复盘提示词</h3>
+            <p>记录哪些表达让 Codex 更稳定：目标、边界、验收标准、禁止事项、测试命令。</p>
+          </article>
+          <article class="card accent-purple">
+            <h3>④ 固化为 Skill</h3>
+            <p>当同类任务重复出现，就用现成 Skill 或自己写 Skill，把经验变成可复用流程。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel section" id="roadmap">
+        <div class="section-head">
+          <div>
+            <span class="badge">6-Week Roadmap</span>
+            <h2>一条系统学习路线</h2>
+          </div>
+          <p>每天 30–60 分钟即可。每周都要产出一个能运行、能验证、能复盘的小成果。</p>
+        </div>
+        <div class="timeline">
+          <article class="week">
+            <div>
+              <h3>终端基础与安全边界</h3>
+              <ul>
+                <li>掌握 <code>codex</code>、<code>codex resume</code>、<code>codex completion</code>。</li>
+                <li>理解工作目录 <code>-C</code>、模型 <code>-m</code>、配置覆盖 <code>-c</code>。</li>
+                <li>练习用 <code>read-only</code>、<code>workspace-write</code>、<code>danger-full-access</code> 描述风险。</li>
+              </ul>
+            </div>
+          </article>
+          <article class="week">
+            <div>
+              <h3>读项目与提需求</h3>
+              <ul>
+                <li>让 Codex 解释目录结构、调用链、测试入口。</li>
+                <li>学习写“任务边界”：哪些文件能改、哪些不能改。</li>
+                <li>用 <code>$deep-interview</code> 或 <code>$plan</code> 处理不清楚的需求。</li>
+              </ul>
+            </div>
+          </article>
+          <article class="week">
+            <div>
+              <h3>小改动闭环</h3>
+              <ul>
+                <li>让 Codex 修一个 bug、补一个测试、改一个 UI 文案。</li>
+                <li>要求先看 diff，再跑最相关测试。</li>
+                <li>复盘：最终回答必须包含 changed files、验证证据、风险。</li>
+              </ul>
+            </div>
+          </article>
+          <article class="week">
+            <div>
+              <h3>Skill 调用与组合</h3>
+              <ul>
+                <li>练习 <code>$code-review</code>、<code>$security-review</code>、<code>$web-clone</code>、<code>$html-ppt</code>。</li>
+                <li>学会显式调用：<code>$plan 请为这个重构给出验收标准</code>。</li>
+                <li>学会组合顺序：先 <code>$plan</code>，再实施，最后 <code>$code-review</code>。</li>
+              </ul>
+            </div>
+          </article>
+          <article class="week">
+            <div>
+              <h3>GitHub 与自动化交付</h3>
+              <ul>
+                <li>掌握 <code>codex review --uncommitted</code>、<code>gh-fix-ci</code>、<code>gh-address-comments</code>。</li>
+                <li>练习提交前检查：<code>git status</code>、<code>git diff</code>、测试命令。</li>
+                <li>发布静态页面、修 CI、回复 review 评论。</li>
+              </ul>
+            </div>
+          </article>
+          <article class="week">
+            <div>
+              <h3>沉淀自己的工作流</h3>
+              <ul>
+                <li>用 <code>$skill-creator</code> 或本地 <code>SKILL.md</code> 固化重复流程。</li>
+                <li>把常用提示词变成模板：需求澄清、代码审查、发布说明。</li>
+                <li>建立个人“任务后复盘”：什么可自动化、什么必须人工确认。</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel section" id="commands">
+        <div class="section-head">
+          <div>
+            <span class="badge">Command Lab</span>
+            <h2>Codex / OMX 常见命令速查</h2>
+          </div>
+          <p>下面按本机 <code>codex --help</code>、<code>codex exec --help</code>、<code>omx --help</code> 摘要整理。点击按钮可复制。</p>
+        </div>
+        <div class="command-lab">
+          <div class="toolbar">
+            <input id="searchInput" class="search" type="search" placeholder="搜索命令、场景或关键词，例如 review / sandbox / skill">
+            <div class="filters" aria-label="命令分类筛选">
+              <button class="filter-button active" data-filter="all" type="button">all</button>
+              <button class="filter-button" data-filter="codex" type="button">codex</button>
+              <button class="filter-button" data-filter="exec" type="button">exec</button>
+              <button class="filter-button" data-filter="safety" type="button">safety</button>
+              <button class="filter-button" data-filter="omx" type="button">omx</button>
+            </div>
+          </div>
+
+          <div class="command-grid" id="commandGrid">
+            <article class="command-card" data-category="codex" data-text="codex interactive tui prompt">
+              <div class="command-top">
+                <span class="command-title">codex "帮我理解这个项目"</span>
+                <button class="copy-button" data-copy="codex &quot;帮我理解这个项目&quot;" type="button">copy</button>
+              </div>
+              <p>启动交互式会话。适合探索、迭代、需要多轮确认的任务。</p>
+              <div class="command-meta"><span class="badge">交互入口</span><span class="badge">TUI</span></div>
+            </article>
+
+            <article class="command-card" data-category="exec" data-text="codex exec non interactive">
+              <div class="command-top">
+                <span class="command-title">codex exec "生成 README 摘要"</span>
+                <button class="copy-button" data-copy="codex exec &quot;生成 README 摘要&quot;" type="button">copy</button>
+              </div>
+              <p>非交互执行一次性任务。适合脚本化、批处理、CI 辅助或明确的小任务。</p>
+              <div class="command-meta"><span class="badge">非交互</span><span class="badge">alias: e</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="resume last session">
+              <div class="command-top">
+                <span class="command-title">codex resume --last</span>
+                <button class="copy-button" data-copy="codex resume --last" type="button">copy</button>
+              </div>
+              <p>继续最近一次会话。适合中断后恢复上下文。</p>
+              <div class="command-meta"><span class="badge">恢复会话</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="fork previous session">
+              <div class="command-top">
+                <span class="command-title">codex fork --last</span>
+                <button class="copy-button" data-copy="codex fork --last" type="button">copy</button>
+              </div>
+              <p>从最近会话分叉一条新思路。适合比较两种方案而不污染原会话。</p>
+              <div class="command-meta"><span class="badge">分叉探索</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="code review uncommitted">
+              <div class="command-top">
+                <span class="command-title">codex review --uncommitted</span>
+                <button class="copy-button" data-copy="codex review --uncommitted" type="button">copy</button>
+              </div>
+              <p>审查 staged、unstaged、untracked 改动。适合提交前找逻辑问题。</p>
+              <div class="command-meta"><span class="badge">review</span><span class="badge">提交前</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="review base branch">
+              <div class="command-top">
+                <span class="command-title">codex review --base main</span>
+                <button class="copy-button" data-copy="codex review --base main" type="button">copy</button>
+              </div>
+              <p>按指定 base 分支审查差异。适合 PR 前自查。</p>
+              <div class="command-meta"><span class="badge">review</span><span class="badge">diff</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="mcp list servers">
+              <div class="command-top">
+                <span class="command-title">codex mcp list</span>
+                <button class="copy-button" data-copy="codex mcp list" type="button">copy</button>
+              </div>
+              <p>查看外部 MCP server。适合排查工具、数据库、浏览器、GitHub 等连接能力。</p>
+              <div class="command-meta"><span class="badge">MCP</span><span class="badge">工具层</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="completion fish zsh shell">
+              <div class="command-top">
+                <span class="command-title">codex completion zsh</span>
+                <button class="copy-button" data-copy="codex completion zsh" type="button">copy</button>
+              </div>
+              <p>生成 shell 自动补全脚本；也支持 bash、fish、powershell、elvish。</p>
+              <div class="command-meta"><span class="badge">补全</span></div>
+            </article>
+
+            <article class="command-card" data-category="safety" data-text="cd workspace directory">
+              <div class="command-top">
+                <span class="command-title">codex -C path/to/repo</span>
+                <button class="copy-button" data-copy="codex -C path/to/repo" type="button">copy</button>
+              </div>
+              <p>指定工作根目录。避免 Codex 在错误目录读写文件。</p>
+              <div class="command-meta"><span class="badge">工作目录</span><span class="badge">安全</span></div>
+            </article>
+
+            <article class="command-card" data-category="safety" data-text="sandbox workspace write read only danger full access">
+              <div class="command-top">
+                <span class="command-title">codex --sandbox workspace-write</span>
+                <button class="copy-button" data-copy="codex --sandbox workspace-write" type="button">copy</button>
+              </div>
+              <p>设置沙盒策略。学习顺序建议：先 read-only，再 workspace-write，最后才理解 danger-full-access。</p>
+              <div class="command-meta"><span class="badge">sandbox</span><span class="badge">安全边界</span></div>
+            </article>
+
+            <article class="command-card" data-category="safety" data-text="approval never on request untrusted">
+              <div class="command-top">
+                <span class="command-title">codex -a on-request</span>
+                <button class="copy-button" data-copy="codex -a on-request" type="button">copy</button>
+              </div>
+              <p>配置审批策略。学习时推荐知道每种含义，不要盲目长期使用最高权限。</p>
+              <div class="command-meta"><span class="badge">approval</span></div>
+            </article>
+
+            <article class="command-card" data-category="safety" data-text="full auto workspace write">
+              <div class="command-top">
+                <span class="command-title">codex --full-auto</span>
+                <button class="copy-button" data-copy="codex --full-auto" type="button">copy</button>
+              </div>
+              <p>低摩擦自动执行别名，适合可信仓库的小任务；高风险任务仍要明确边界。</p>
+              <div class="command-meta"><span class="badge">自动执行</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="web search image">
+              <div class="command-top">
+                <span class="command-title">codex --search "查官方文档"</span>
+                <button class="copy-button" data-copy="codex --search &quot;查官方文档&quot;" type="button">copy</button>
+              </div>
+              <p>启用实时网页搜索。适合依赖最新文档、价格、规则、版本的信息。</p>
+              <div class="command-meta"><span class="badge">web search</span></div>
+            </article>
+
+            <article class="command-card" data-category="codex" data-text="image attach">
+              <div class="command-top">
+                <span class="command-title">codex -i screenshot.png</span>
+                <button class="copy-button" data-copy="codex -i screenshot.png" type="button">copy</button>
+              </div>
+              <p>给初始提示附图。适合 UI 还原、截图诊断、设计审查。</p>
+              <div class="command-meta"><span class="badge">视觉输入</span></div>
+            </article>
+
+            <article class="command-card" data-category="omx" data-text="omx setup doctor status">
+              <div class="command-top">
+                <span class="command-title">omx setup / omx doctor</span>
+                <button class="copy-button" data-copy="omx doctor" type="button">copy</button>
+              </div>
+              <p>安装与诊断 oh-my-codex。遇到 Skill、MCP、AGENTS 配置问题先 doctor。</p>
+              <div class="command-meta"><span class="badge">OMX</span><span class="badge">诊断</span></div>
+            </article>
+
+            <article class="command-card" data-category="omx" data-text="omx explore read only code search">
+              <div class="command-top">
+                <span class="command-title">omx explore --prompt "找入口文件"</span>
+                <button class="copy-button" data-copy="omx explore --prompt &quot;找入口文件&quot;" type="button">copy</button>
+              </div>
+              <p>只读探索入口。适合快速找文件、符号、调用关系。</p>
+              <div class="command-meta"><span class="badge">只读探索</span></div>
+            </article>
+
+            <article class="command-card" data-category="omx" data-text="omx sparkshell command">
+              <div class="command-top">
+                <span class="command-title">omx sparkshell "rg TODO"</span>
+                <button class="copy-button" data-copy="omx sparkshell &quot;rg TODO&quot;" type="button">copy</button>
+              </div>
+              <p>运行嘈杂的只读 shell 查询，适合 repo-wide 搜索、日志摘要。</p>
+              <div class="command-meta"><span class="badge">只读 shell</span></div>
+            </article>
+
+            <article class="command-card" data-category="omx" data-text="omx status cancel trace">
+              <div class="command-top">
+                <span class="command-title">omx status / omx trace</span>
+                <button class="copy-button" data-copy="omx status && omx trace" type="button">copy</button>
+              </div>
+              <p>查看 active modes 和执行轨迹。适合长任务复盘。</p>
+              <div class="command-meta"><span class="badge">状态</span><span class="badge">复盘</span></div>
+            </article>
+
+            <article class="command-card" data-category="omx" data-text="omx reasoning high xhigh">
+              <div class="command-top">
+                <span class="command-title">omx reasoning high</span>
+                <button class="copy-button" data-copy="omx reasoning high" type="button">copy</button>
+              </div>
+              <p>查看或设置推理强度。复杂架构和诊断用高一些，简单改动不必浪费。</p>
+              <div class="command-meta"><span class="badge">reasoning</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel section" id="skills">
+        <div class="section-head">
+          <div>
+            <span class="badge">Skill Invocation</span>
+            <h2>Skill 调用技巧</h2>
+          </div>
+          <p>Skill 的关键不是“会喊名字”，而是知道什么时候该把普通任务升级成结构化工作流。</p>
+        </div>
+
+        <div class="grid cols-2">
+          <article class="card accent-blue">
+            <h3>显式调用模板</h3>
+            <p>当你已经知道要哪种工作流，用 <code>$name</code> 开头最稳。</p>
+            <div class="prompt-box">$plan 请帮我为这个功能制定实现计划。
+背景：……
+边界：只能改 src/components 和 tests。
+验收：页面可访问、测试通过、最终说明风险。</div>
+          </article>
+          <article class="card accent-green">
+            <h3>关键词自动路由</h3>
+            <p>有些词会触发工作流，例如 code review、security review、web-clone、deep interview。想避免误触发，就说清楚“只解释，不执行”。</p>
+            <div class="prompt-box">请做 code review：
+- 只关注这次 diff
+- 按严重程度排序
+- 不要改代码，先给结论和证据</div>
+          </article>
+        </div>
+
+        <div class="skill-grid" aria-label="常见 Skill 分类">
+          <article class="skill-card">
+            <div class="skill-name"><strong>$plan</strong><span class="badge">规划</span></div>
+            <p>需求清楚但实现路径还需要拆解时使用。</p>
+            <ul>
+              <li>适合：功能设计、重构路线、测试策略。</li>
+              <li>不适合：马上能完成的小改动。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$deep-interview</strong><span class="badge">澄清</span></div>
+            <p>你自己也没想清楚目标、边界、取舍时使用。</p>
+            <ul>
+              <li>适合：产品需求、架构方向、模糊目标。</li>
+              <li>关键词：不要假设、采访我、gather requirements。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$ralplan</strong><span class="badge">共识计划</span></div>
+            <p>需求基本明确，但要更严谨地权衡风险时使用。</p>
+            <ul>
+              <li>适合：中大型改动前的设计评审。</li>
+              <li>产出：PRD、测试规格或结构化计划。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$code-review</strong><span class="badge">审查</span></div>
+            <p>提交前或合并前找 bug、可维护性问题和隐藏风险。</p>
+            <ul>
+              <li>加一句：只看当前 diff，按严重程度排序。</li>
+              <li>让它给证据，不要只给风格建议。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$security-review</strong><span class="badge">安全</span></div>
+            <p>涉及认证、授权、密钥、文件上传、网络边界时使用。</p>
+            <ul>
+              <li>要求列出攻击面、利用条件、修复建议。</li>
+              <li>不要把普通 lint 问题混进安全结论。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$gh-fix-ci</strong><span class="badge">CI</span></div>
+            <p>GitHub Actions 失败时用它定位日志和失败检查。</p>
+            <ul>
+              <li>适合：PR 检查失败、测试在 CI 才挂。</li>
+              <li>先诊断，再批准改动范围。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$web-clone</strong><span class="badge">网页</span></div>
+            <p>要复刻一个网页、做视觉还原、验证截图时使用。</p>
+            <ul>
+              <li>最好给 URL、目标尺寸、验收截图。</li>
+              <li>视觉任务要持续截图对比。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$html-ppt</strong><span class="badge">演示</span></div>
+            <p>要做 PPT、slides、分享稿、Keynote 风格页面时使用。</p>
+            <ul>
+              <li>给受众、时长、页数、风格关键词。</li>
+              <li>适合生成可键盘导航的 HTML deck。</li>
+            </ul>
+          </article>
+
+          <article class="skill-card">
+            <div class="skill-name"><strong>$skill</strong><span class="badge">管理</span></div>
+            <p>列出、安装、搜索或管理本地技能。</p>
+            <ul>
+              <li>重复流程多了，就考虑创建自己的 Skill。</li>
+              <li>把“经验”变成可复用的 <code>SKILL.md</code>。</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel section">
+        <div class="section-head">
+          <div>
+            <span class="badge">Prompt Patterns</span>
+            <h2>最稳定的提问结构</h2>
+          </div>
+          <p>给 Codex 的任务越像工程票据，它越容易产出可验证结果。</p>
+        </div>
+        <table class="matrix">
+          <thead>
+            <tr>
+              <th>结构</th>
+              <th>你要写什么</th>
+              <th>示例</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>目标</code></td>
+              <td>最终用户能看到或做到什么。</td>
+              <td>“新增一个 Codex 学习网页并发布到 GitHub Pages。”</td>
+            </tr>
+            <tr>
+              <td><code>边界</code></td>
+              <td>哪些文件能改、哪些不能碰、是否允许新增依赖。</td>
+              <td>“只做静态 HTML/CSS/JS，不加依赖，不覆盖旧页面。”</td>
+            </tr>
+            <tr>
+              <td><code>验收</code></td>
+              <td>怎样算完成，跑什么命令证明。</td>
+              <td>“页面能本地打开，链接可访问，git diff 清晰。”</td>
+            </tr>
+            <tr>
+              <td><code>风险</code></td>
+              <td>必须提前提醒的人类决策点。</td>
+              <td>“不要删除旧站点；如果要推 main，请说明 commit。”</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel section" id="practice">
+        <div class="section-head">
+          <div>
+            <span class="badge">Practice Checklist</span>
+            <h2>每日练习清单</h2>
+          </div>
+          <p>勾选状态会保存在当前浏览器。建议每天挑 3–5 项做，不要一次性刷完。</p>
+        </div>
+        <div class="checklist" id="checklist">
+          <label><input type="checkbox" data-key="help"><span>运行一次 <code>codex --help</code> 并说出 5 个入口的用途。</span></label>
+          <label><input type="checkbox" data-key="exec"><span>用 <code>codex exec</code> 完成一个非交互小任务。</span></label>
+          <label><input type="checkbox" data-key="resume"><span>用 <code>codex resume --last</code> 恢复一次上下文。</span></label>
+          <label><input type="checkbox" data-key="sandbox"><span>解释 <code>read-only</code>、<code>workspace-write</code>、<code>danger-full-access</code> 的差别。</span></label>
+          <label><input type="checkbox" data-key="plan"><span>用 <code>$plan</code> 为一个改动写验收标准。</span></label>
+          <label><input type="checkbox" data-key="review"><span>用 <code>codex review --uncommitted</code> 检查一次 diff。</span></label>
+          <label><input type="checkbox" data-key="skill"><span>显式调用一个 Skill，并在提示词里写清目标、边界、验收。</span></label>
+          <label><input type="checkbox" data-key="publish"><span>完成一次从本地修改到 GitHub 发布的完整闭环。</span></label>
+        </div>
+      </section>
+
+      <section class="panel section">
+        <div class="section-head">
+          <div>
+            <span class="badge">When To Escalate</span>
+            <h2>什么时候不要硬上自动化</h2>
+          </div>
+          <p>真正熟练的人不是永远开最大权限，而是知道什么时候收窄范围。</p>
+        </div>
+        <div class="grid cols-3">
+          <article class="card accent-amber">
+            <h3>高风险命令</h3>
+            <p>涉及删除、重置、迁移生产数据、覆盖发布时，明确让 Codex 先解释计划和回滚方式。</p>
+          </article>
+          <article class="card accent-purple">
+            <h3>需求分叉</h3>
+            <p>当“做 A 还是做 B”会影响很多文件时，先用 <code>$deep-interview</code> 或 <code>$ralplan</code>。</p>
+          </article>
+          <article class="card accent-blue">
+            <h3>新 API / 新 SDK</h3>
+            <p>要求先查官方文档，再实现。尤其是 OpenAI、云服务、支付、安全相关能力。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <strong>学习建议：</strong>每次让 Codex 做事，都按“目标 → 边界 → 验收 → 验证证据”来写。命令会忘，闭环不会。
+    </footer>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-button");
+    const commandCards = document.querySelectorAll(".command-card");
+    const copyButtons = document.querySelectorAll(".copy-button");
+    const checklist = document.querySelectorAll("#checklist input[type='checkbox']");
+    let activeFilter = "all";
+
+    function normalize(value) {
+      return value.toLowerCase().trim();
+    }
+
+    function applyCommandFilters() {
+      const query = normalize(searchInput.value);
+      commandCards.forEach((card) => {
+        const categoryMatch = activeFilter === "all" || card.dataset.category === activeFilter;
+        const text = normalize(`${card.innerText} ${card.dataset.text || ""}`);
+        const queryMatch = !query || text.includes(query);
+        card.classList.toggle("hidden", !(categoryMatch && queryMatch));
+      });
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        filterButtons.forEach((item) => item.classList.toggle("active", item === button));
+        applyCommandFilters();
+      });
+    });
+
+    searchInput.addEventListener("input", applyCommandFilters);
+
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const text = button.dataset.copy;
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = "copied";
+          button.classList.add("copied");
+          setTimeout(() => {
+            button.textContent = "copy";
+            button.classList.remove("copied");
+          }, 1200);
+        } catch {
+          button.textContent = "select";
+        }
+      });
+    });
+
+    checklist.forEach((box) => {
+      const key = `codex-learning-${box.dataset.key}`;
+      box.checked = localStorage.getItem(key) === "true";
+      box.addEventListener("change", () => {
+        localStorage.setItem(key, String(box.checked));
+      });
+    });
+  </script>
+</body>
+</html>
