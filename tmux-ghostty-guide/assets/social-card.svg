@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">tmux × Ghostty 新手指南</title>
+  <desc id="desc">一张像素田园风格的社交分享图，面向 Mac 和 Ghostty 用户，突出 session、window、pane 三层结构。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#98d8ff"/>
+      <stop offset="58%" stop-color="#d0f0ff"/>
+      <stop offset="58%" stop-color="#f8efc7"/>
+      <stop offset="76%" stop-color="#f2d28c"/>
+      <stop offset="76%" stop-color="#7cbc4b"/>
+      <stop offset="100%" stop-color="#67a43d"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3d799"/>
+      <stop offset="100%" stop-color="#d3ab67"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff8e4"/>
+      <stop offset="100%" stop-color="#f4e4b8"/>
+    </linearGradient>
+    <style>
+      .pixel { shape-rendering: crispEdges; }
+      .title { font: 700 54px "Trebuchet MS", Verdana, sans-serif; fill: #355329; }
+      .subtitle { font: 700 30px "Trebuchet MS", Verdana, sans-serif; fill: #5f8fca; }
+      .body { font: 28px "Trebuchet MS", Verdana, sans-serif; fill: #4a3926; }
+      .small { font: 24px "Trebuchet MS", Verdana, sans-serif; fill: #6c5a42; }
+      .mono { font: 700 26px "Monaco", "SF Mono", Menlo, monospace; fill: #3c2a18; }
+      .badge { font: 700 22px "Monaco", "SF Mono", Menlo, monospace; letter-spacing: 2px; fill: #5f8fca; }
+      .tile-label { font: 700 18px "Monaco", "SF Mono", Menlo, monospace; fill: #5f8fca; letter-spacing: 1.5px; }
+      .tile-text { font: 22px "Trebuchet MS", Verdana, sans-serif; fill: #4a3926; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#sky)" class="pixel"/>
+
+  <g class="pixel" opacity="0.4">
+    <path d="M0 0h1200v30H0z" fill="#ffffff"/>
+    <path d="M0 0h1200v2H0zm0 28h1200v2H0z" fill="#ffffff"/>
+    <path d="M0 60h1200v2H0zm0 90h1200v2H0zm0 120h1200v2H0z" fill="#ffffff"/>
+    <path d="M30 0v360h2V0zm90 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0zm120 0v360h2V0z" fill="#ffffff"/>
+  </g>
+
+  <g class="pixel">
+    <rect x="882" y="70" width="74" height="74" fill="#ffe77b"/>
+    <rect x="882" y="74" width="74" height="4" fill="#fff3bc"/>
+    <rect x="876" y="102" width="20" height="18" fill="#ffffff" opacity="0.88"/>
+    <rect x="890" y="92" width="24" height="18" fill="#ffffff" opacity="0.88"/>
+    <rect x="924" y="102" width="26" height="20" fill="#ffffff" opacity="0.84"/>
+    <rect x="1012" y="96" width="36" height="22" fill="#ffffff" opacity="0.84"/>
+    <rect x="1034" y="88" width="40" height="24" fill="#ffffff" opacity="0.88"/>
+    <rect x="1062" y="98" width="34" height="22" fill="#ffffff" opacity="0.84"/>
+  </g>
+
+  <g class="pixel">
+    <rect x="0" y="484" width="1200" height="30" fill="#76b349"/>
+    <rect x="0" y="514" width="1200" height="116" fill="#67a43d"/>
+    <path d="M0 500h1200v6H0zm0 548h1200v6H0z" fill="#5f8d39"/>
+    <path d="M0 560h1200v4H0z" fill="#588532"/>
+    <path d="M0 584h1200v4H0z" fill="#588532"/>
+    <path d="M0 608h1200v4H0z" fill="#588532"/>
+  </g>
+
+  <g class="pixel">
+    <rect x="78" y="86" width="720" height="404" rx="10" fill="#8a653c"/>
+    <rect x="90" y="98" width="696" height="380" rx="8" fill="url(#wood)"/>
+    <rect x="116" y="126" width="648" height="322" rx="8" fill="url(#paper)"/>
+    <rect x="116" y="126" width="648" height="18" fill="#fff5d9"/>
+    <rect x="116" y="430" width="648" height="18" fill="#e2c985"/>
+  </g>
+
+  <g class="pixel">
+    <rect x="146" y="156" width="128" height="38" rx="6" fill="#eef7ff" stroke="#88b4dd" stroke-width="3"/>
+    <text x="170" y="182" class="badge">PIXEL EDITION</text>
+
+    <text x="146" y="250" class="title">tmux × Ghostty</text>
+    <text x="146" y="312" class="title">新手指南</text>
+    <text x="146" y="360" class="body">像玩星露谷一样，上手 tmux。</text>
+    <text x="146" y="398" class="small">先学 session，再学 window，最后打开 pane。</text>
+
+    <rect x="146" y="428" width="292" height="18" fill="#a6d36a"/>
+    <rect x="146" y="446" width="292" height="12" fill="#7dae49"/>
+  </g>
+
+  <g class="pixel">
+    <rect x="830" y="176" width="282" height="96" rx="10" fill="#fff8e4" stroke="#8a653c" stroke-width="4"/>
+    <rect x="830" y="176" width="282" height="18" fill="#f5e0aa"/>
+    <rect x="854" y="210" width="36" height="36" rx="6" fill="#eed89a" stroke="#8a653c" stroke-width="3"/>
+    <text x="867" y="234" class="mono">S</text>
+    <text x="908" y="222" class="tile-label">SESSION</text>
+    <text x="908" y="246" class="tile-text">一个项目一个工作区</text>
+  </g>
+
+  <g class="pixel">
+    <rect x="830" y="286" width="282" height="96" rx="10" fill="#fff8e4" stroke="#8a653c" stroke-width="4"/>
+    <rect x="830" y="286" width="282" height="18" fill="#f5e0aa"/>
+    <rect x="854" y="320" width="36" height="36" rx="6" fill="#eed89a" stroke="#8a653c" stroke-width="3"/>
+    <text x="866" y="344" class="mono">W</text>
+    <text x="908" y="332" class="tile-label">WINDOW</text>
+    <text x="908" y="356" class="tile-text">一个任务一个页面</text>
+  </g>
+
+  <g class="pixel">
+    <rect x="830" y="396" width="282" height="96" rx="10" fill="#fff8e4" stroke="#8a653c" stroke-width="4"/>
+    <rect x="830" y="396" width="282" height="18" fill="#f5e0aa"/>
+    <rect x="854" y="430" width="36" height="36" rx="6" fill="#eed89a" stroke="#8a653c" stroke-width="3"/>
+    <text x="866" y="454" class="mono">P</text>
+    <text x="908" y="442" class="tile-label">PANE</text>
+    <text x="908" y="466" class="tile-text">一个视角一个分屏</text>
+  </g>
+
+  <g class="pixel">
+    <rect x="804" y="530" width="334" height="54" rx="10" fill="#eef7ff" stroke="#88b4dd" stroke-width="4"/>
+    <text x="834" y="564" class="small">liyongzheng666.github.io</text>
+  </g>
+</svg>

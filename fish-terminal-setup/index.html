@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fish Terminal Setup 快捷键图鉴</title>
+  <meta name="description" content="基于 Terminal-setup 仓库整理的 Fish 技术选型快捷键与命令捷径，覆盖 Fish 原生能力、fzf、zoxide、lazygit、btop、delta 与 Fish abbr。">
+  <meta name="theme-color" content="#184f3e">
+  <style>
+    :root {
+      --bg: #f6f0dc;
+      --bg-soft: #fff9eb;
+      --ink: #1d2b24;
+      --muted: #5e685f;
+      --line: rgba(29, 43, 36, 0.16);
+      --line-strong: rgba(29, 43, 36, 0.48);
+      --green: #184f3e;
+      --green-soft: #dcefe4;
+      --mint: #8cc6a6;
+      --amber: #d98d36;
+      --amber-soft: #fff0db;
+      --teal: #2d7d78;
+      --rose: #ad5a53;
+      --rose-soft: #f8e1dd;
+      --card: rgba(255, 250, 239, 0.92);
+      --shadow: 0 10px 24px rgba(33, 46, 39, 0.12);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --mono: "SF Mono", "Monaco", "Menlo", "Cascadia Code", monospace;
+      --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
+      --sans: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        radial-gradient(circle at top left, rgba(140, 198, 166, 0.32), transparent 24%),
+        radial-gradient(circle at top right, rgba(217, 141, 54, 0.22), transparent 24%),
+        linear-gradient(180deg, #f4f7ef 0%, #f6f0dc 18%, #f3e7c6 100%);
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(24, 79, 62, 0.035) 0 1px,
+          transparent 1px 36px
+        ),
+        repeating-linear-gradient(
+          180deg,
+          rgba(24, 79, 62, 0.03) 0 1px,
+          transparent 1px 36px
+        );
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    code,
+    .keys,
+    .badge,
+    .copy-chip,
+    .source-link,
+    .stat-label {
+      font-family: var(--mono);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 20px 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 252, 244, 0.88);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 24px rgba(33, 46, 39, 0.08);
+      z-index: 20;
+    }
+
+    .brand {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0f4334, #2f7860);
+      color: #f8f0d8;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-copy strong,
+    .brand-copy span {
+      display: block;
+    }
+
+    .brand-copy strong {
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span {
+      font-size: 0.82rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 34ch;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(24, 79, 62, 0.12);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--green);
+      font-size: 0.92rem;
+      transition: 180ms ease;
+    }
+
+    .nav a:hover {
+      background: rgba(140, 198, 166, 0.22);
+      border-color: rgba(24, 79, 62, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 30px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(24, 79, 62, 0.08);
+      color: var(--green);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--serif);
+      line-height: 1.05;
+      color: #17372e;
+    }
+
+    h1 {
+      margin-top: 16px;
+      font-size: clamp(2.7rem, 5vw, 4.8rem);
+      max-width: 11ch;
+    }
+
+    .hero-copy p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.78;
+      max-width: 52ch;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(24, 79, 62, 0.12);
+      color: var(--green);
+    }
+
+    .hero-side {
+      padding: 24px;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+      background:
+        linear-gradient(160deg, rgba(24, 79, 62, 0.95), rgba(45, 125, 120, 0.92)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent);
+      color: #f6f0dc;
+    }
+
+    .hero-side h2 {
+      color: #fff7e7;
+      font-size: 1.55rem;
+    }
+
+    .hero-side p {
+      margin: 0;
+      line-height: 1.72;
+      color: rgba(250, 245, 232, 0.88);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .stat strong,
+    .stat span {
+      display: block;
+    }
+
+    .stat strong {
+      font-size: 1.3rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: rgba(248, 241, 224, 0.74);
+    }
+
+    .section {
+      margin-top: 18px;
+      padding: 26px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.72;
+      max-width: 62ch;
+    }
+
+    .summary-grid,
+    .inventory-grid,
+    .source-grid,
+    .none-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .summary-card,
+    .inventory-card,
+    .source-card,
+    .none-card {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .summary-card h3,
+    .inventory-card h3,
+    .source-card h3,
+    .none-card h3 {
+      font-size: 1.12rem;
+    }
+
+    .summary-card p,
+    .inventory-card p,
+    .source-card p,
+    .none-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .chipset {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      border: 1px solid transparent;
+    }
+
+    .chip-green {
+      background: var(--green-soft);
+      color: var(--green);
+      border-color: rgba(24, 79, 62, 0.12);
+    }
+
+    .chip-amber {
+      background: var(--amber-soft);
+      color: #8c5619;
+      border-color: rgba(217, 141, 54, 0.16);
+    }
+
+    .chip-rose {
+      background: var(--rose-soft);
+      color: var(--rose);
+      border-color: rgba(173, 90, 83, 0.16);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .toolbar input {
+      flex: 1 1 260px;
+      min-height: 46px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 0 16px;
+      background: rgba(255, 255, 255, 0.86);
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .toolbar button {
+      min-height: 46px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--green);
+      font: inherit;
+      cursor: pointer;
+      transition: 180ms ease;
+    }
+
+    .toolbar button.active,
+    .toolbar button:hover {
+      background: rgba(24, 79, 62, 0.12);
+      border-color: rgba(24, 79, 62, 0.26);
+    }
+
+    .group-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .group {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(24, 79, 62, 0.06), rgba(255, 255, 255, 0));
+    }
+
+    .group-header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.68;
+      max-width: 62ch;
+    }
+
+    .group-body {
+      display: grid;
+      gap: 1px;
+      background: rgba(29, 43, 36, 0.08);
+    }
+
+    .shortcut-row {
+      display: grid;
+      grid-template-columns: minmax(120px, 170px) minmax(160px, 1fr) minmax(120px, 0.9fr) minmax(160px, 1fr);
+      gap: 16px;
+      align-items: start;
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .shortcut-row > div small {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .shortcut-row strong {
+      display: block;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: rgba(24, 79, 62, 0.72);
+      margin-bottom: 8px;
+    }
+
+    .keys {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.87rem;
+      color: var(--green);
+    }
+
+    .keycap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(24, 79, 62, 0.16);
+      background: rgba(24, 79, 62, 0.08);
+      box-shadow: inset 0 -1px 0 rgba(24, 79, 62, 0.08);
+    }
+
+    .note-row {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(24, 79, 62, 0.06);
+      color: var(--green);
+      line-height: 1.68;
+    }
+
+    .command-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .command-card {
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.76);
+      display: grid;
+      gap: 12px;
+    }
+
+    .command-card h3 {
+      font-size: 1.12rem;
+    }
+
+    .command-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.68;
+    }
+
+    .command-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .command-item {
+      display: grid;
+      grid-template-columns: minmax(110px, 170px) 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(24, 79, 62, 0.05);
+      border: 1px solid rgba(24, 79, 62, 0.08);
+    }
+
+    .command-item code {
+      font-size: 0.88rem;
+      color: var(--green);
+      word-break: break-word;
+    }
+
+    .command-item span {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .copy-chip {
+      border: 1px solid rgba(24, 79, 62, 0.16);
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--green);
+      border-radius: 999px;
+      min-height: 34px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .copy-chip:hover {
+      background: rgba(24, 79, 62, 0.08);
+    }
+
+    .source-link {
+      color: var(--green);
+      text-decoration-color: rgba(24, 79, 62, 0.2);
+      text-underline-offset: 3px;
+      font-size: 0.84rem;
+    }
+
+    .footer {
+      margin-top: 18px;
+      padding: 20px 24px;
+      border-radius: var(--radius-lg);
+      background: rgba(24, 79, 62, 0.94);
+      color: rgba(249, 243, 228, 0.9);
+      line-height: 1.72;
+    }
+
+    .footer a {
+      color: #fff7e7;
+    }
+
+    .catalog-item.hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1100px) {
+      .hero,
+      .summary-grid,
+      .inventory-grid,
+      .source-grid,
+      .none-grid,
+      .command-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .shortcut-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .topbar,
+      .section,
+      .hero-copy,
+      .hero-side {
+        border-radius: 20px;
+      }
+
+      .topbar,
+      .section-head,
+      .group-header,
+      .command-item {
+        display: block;
+      }
+
+      .nav {
+        margin-top: 12px;
+      }
+
+      .shortcut-row,
+      .command-item {
+        grid-template-columns: 1fr;
+      }
+
+      .group-header,
+      .shortcut-row,
+      .hero-copy,
+      .hero-side,
+      .section {
+        padding: 18px;
+      }
+
+      h1 {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">F+</div>
+        <div class="brand-copy">
+          <strong>Fish Guide Pages</strong>
+          <span>Terminal-setup 仓库的 Fish 技术选型快捷键总表</span>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="../">指南书架</a>
+        <a href="../tmux-ghostty-guide/">tmux 指南</a>
+        <a href="../claude-code-training/">Claude Code 培训</a>
+        <a href="../codex-terminal-skills/">Codex 学习</a>
+        <a href="#scope">范围</a>
+        <a href="#inventory">接入清单</a>
+        <a href="#keyboard">键盘快捷键</a>
+        <a href="#commands">命令捷径</a>
+        <a href="#sources">来源</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <article class="panel hero-copy">
+        <div class="eyebrow">Fish Route / Terminal-setup / Static Pages</div>
+        <h1>Fish Terminal Setup 快捷键图鉴</h1>
+        <p>
+          这页不是泛泛的 Fish Cheat Sheet，而是专门按照
+          <code>Terminal-setup</code> 仓库里的 Fish 路线整理出来的“实装版”速查表。
+          我把仓库真正接入的组件、仓库直接给出的快捷键、以及我补充核对过的上游默认按键分层标清了。
+        </p>
+        <p>
+          结论先说在前面：这个方案并没有额外装 <code>fisher</code>、<code>oh-my-fish</code> 之类的插件管理器，
+          它走的是 <strong>Fish 原生能力 + fzf/zoxide + 一批 CLI/TUI 工具</strong> 的轻量路线。
+          真正需要背键位的重点是 <code>Fish</code>、<code>fzf</code>、<code>lazygit</code>、<code>btop</code> 和 <code>delta</code>。
+        </p>
+        <div class="pill-row">
+          <span class="badge">Fish 原生补全 / autosuggestion / syntax highlight</span>
+          <span class="badge">fzf 键盘集成</span>
+          <span class="badge">zoxide 智能跳转</span>
+          <span class="badge">lazygit / btop / delta</span>
+          <span class="badge">Fish abbr 命令缩写</span>
+        </div>
+      </article>
+
+      <aside class="panel hero-side">
+        <div>
+          <h2>这页怎么读</h2>
+          <p>先看“范围”确认哪些东西算作这套 Fish 方案的一部分，再用搜索框筛出你常用的组件。命令型捷径和真正的键盘快捷键是分开整理的，避免把 alias、abbr 和 keybinding 混成一锅。</p>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <strong>轻量</strong>
+            <span class="stat-label">没有额外 Fish 插件管理器</span>
+          </div>
+          <div class="stat">
+            <strong>分层</strong>
+            <span class="stat-label">仓库直出 / 上游默认 / 命令捷径</span>
+          </div>
+          <div class="stat">
+            <strong>静态</strong>
+            <span class="stat-label">纯 HTML 页面，天然适合 GitHub Pages</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="scope" class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>范围判断</h2>
+          <p>用户问的是 “Fish 这个技术选型下所有插件的基础快捷键”。所以我先按仓库实现方式做了三个判断：哪些是 Fish 路线真实接入的组件，哪些组件真的存在键盘快捷键，哪些更适合归到“输入式捷径”。</p>
+        </div>
+      </div>
+
+      <div class="summary-grid">
+        <article class="summary-card catalog-item" data-kind="scope">
+          <h3>1. 这不是 Oh My Fish 套餐</h3>
+          <p>仓库的 Fish 配置只在 <code>config.fish</code> 里初始化 <code>starship</code>、<code>fnm</code>、<code>zoxide</code>、<code>fzf</code>，并追加一组 Fish <code>abbr</code>。没有 <code>fisher</code>、<code>oh-my-fish</code> 或额外 Fish 插件仓库。</p>
+          <div class="chipset">
+            <span class="chip chip-green">仓库直出</span>
+            <span class="chip chip-amber">零插件管理器</span>
+          </div>
+        </article>
+
+        <article class="summary-card catalog-item" data-kind="scope">
+          <h3>2. 真正需要背键位的组件很集中</h3>
+          <p>键位主要集中在 Fish 原生交互、<code>fzf</code>、<code>lazygit</code>、<code>btop</code> 和 <code>delta</code>。像 <code>starship</code>、<code>ghostty</code>、<code>fnm</code> 在这个仓库里并没有额外自定义快捷键。</p>
+          <div class="chipset">
+            <span class="chip chip-green">键盘快捷键</span>
+            <span class="chip chip-rose">非所有组件都有键位</span>
+          </div>
+        </article>
+
+        <article class="summary-card catalog-item" data-kind="scope">
+          <h3>3. zoxide / abbr 更像“输入式快捷入口”</h3>
+          <p><code>z proj</code>、<code>zi</code>、<code>ls</code>→<code>eza</code>、<code>lg</code>→<code>lazygit</code> 这种更适合归类为 typed shortcuts。它们不是按键映射，但在日常使用里同样应该背。</p>
+          <div class="chipset">
+            <span class="chip chip-amber">命令捷径</span>
+            <span class="chip chip-green">Fish abbr</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="inventory" class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>Fish 路线真实接入清单</h2>
+          <p>这一段只回答“它到底装了什么、有没有快捷键”这件事，不把说明文档里顺手提到的工具和真正接入到 Fish 的内容混在一起。</p>
+        </div>
+      </div>
+
+      <div class="inventory-grid">
+        <article class="inventory-card catalog-item" data-kind="inventory">
+          <h3>Fish Shell</h3>
+          <p>这套方案的 shell 本体。自动补全、autosuggestion、syntax highlighting 都是 Fish 原生能力，不是额外插件。</p>
+          <div class="chipset">
+            <span class="chip chip-green">有基础键位</span>
+            <span class="chip chip-amber">上游默认</span>
+          </div>
+        </article>
+
+        <article class="inventory-card catalog-item" data-kind="inventory">
+          <h3>fzf</h3>
+          <p>仓库显式执行 <code>fzf --fish | source</code>，并设置了 <code>FZF_DEFAULT_COMMAND</code>、<code>FZF_CTRL_T_COMMAND</code>、<code>FZF_ALT_C_COMMAND</code>。</p>
+          <div class="chipset">
+            <span class="chip chip-green">有基础键位</span>
+            <span class="chip chip-green">仓库直出</span>
+          </div>
+        </article>
+
+        <article class="inventory-card catalog-item" data-kind="inventory">
+          <h3>zoxide</h3>
+          <p>仓库显式执行 <code>zoxide init fish | source</code>，并把 <code>cd</code> 写成了 <code>abbr -a cd "z"</code>。更像命令捷径，而不是键位。</p>
+          <div class="chipset">
+            <span class="chip chip-amber">命令捷径</span>
+            <span class="chip chip-green">仓库直出</span>
+          </div>
+        </article>
+
+        <article class="inventory-card catalog-item" data-kind="inventory">
+          <h3>Fish Abbreviations</h3>
+          <p>仓库把 <code>ls</code>、<code>ll</code>、<code>lt</code>、<code>cat</code>、<code>find</code>、<code>grep</code>、<code>top</code>、<code>lg</code>、<code>cd</code> 全部写成了 Fish <code>abbr</code>。</p>
+          <div class="chipset">
+            <span class="chip chip-amber">命令捷径</span>
+            <span class="chip chip-green">仓库直出</span>
+          </div>
+        </article>
+
+        <article class="inventory-card catalog-item" data-kind="inventory">
+          <h3>lazygit / btop / delta</h3>
+          <p>这些不是 Fish 插件，但都属于 Fish 技术选型下实际安装的交互式工具。它们的基础键位值得一起整理成速查表。</p>
+          <div class="chipset">
+            <span class="chip chip-green">有基础键位</span>
+            <span class="chip chip-amber">上游默认</span>
+          </div>
+        </article>
+
+        <article class="inventory-card catalog-item" data-kind="inventory">
+          <h3>Ghostty / Starship / fnm</h3>
+          <p>仓库会安装并配置，但在 Fish 路线里没有额外自定义按键。它们更像显示层、提示符和版本管理层。</p>
+          <div class="chipset">
+            <span class="chip chip-rose">无额外键位</span>
+            <span class="chip chip-green">仓库直出</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="keyboard" class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>键盘快捷键总表</h2>
+          <p>这里收的是“真按键”。搜索框会同时匹配组件名、键位和描述。默认展示仓库 Fish 路线里最值得背的快捷键组。</p>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="筛选组件、键位或动作，例如 fzf / ctrl+r / checkout">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="keyboard">只看键盘快捷键</button>
+        <button class="filter-btn" data-filter="command">只看命令捷径</button>
+        <button class="filter-btn" data-filter="none">只看无键位组件</button>
+      </div>
+
+      <div class="group-stack">
+        <section class="group catalog-item" data-kind="keyboard">
+          <div class="group-header">
+            <div>
+              <h3>Fish 原生交互</h3>
+              <p>这些不是第三方插件，而是 Fish 自带能力。之所以一起放进来，是因为这套技术选型的“Fish 体验”本身就依赖它们。</p>
+            </div>
+            <div class="chipset">
+              <span class="chip chip-green">上游默认</span>
+              <span class="chip chip-amber">适用于未改绑键位的默认 Fish</span>
+            </div>
+          </div>
+          <div class="group-body">
+            <article class="shortcut-row">
+              <div>
+                <strong>键位</strong>
+                <div class="keys">
+                  <span class="keycap">Right</span>
+                  <span class="keycap">Ctrl+F</span>
+                </div>
+              </div>
+              <div>
+                <strong>作用</strong>
+                接受当前 autosuggestion
+              </div>
+              <div>
+                <strong>来源</strong>
+                <a class="source-link" href="https://fishshell.com/docs/3.0/" target="_blank" rel="noreferrer">Fish 文档</a>
+              </div>
+              <div>
+                <strong>备注</strong>
+                Fish 会把历史记录、补全和路径建议显示在光标后面。
+              </div>
+            </article>
+
+            <article class="shortcut-row">
+              <div>
+                <strong>键位</strong>
+                <div class="keys">
+                  <span class="keycap">Alt+Right</span>
+                  <span class="keycap">Alt+F</span>
+                </div>
+              </div>
+              <div>
+                <strong>作用</strong>
+                只接受建议里的第一个词
+              </div>
+              <div>
+                <strong>来源</strong>
+                <a class="source-link" href="https://fishshell.com/docs/3.0/" target="_blank" rel="noreferrer">Fish 文档</a>
+              </div>
+              <div>
+                <strong>备注</strong>
+                适合慢慢补全很长的命令。
+              </div>
+            </article>
+
+            <article class="shortcut-row">
+              <div>
+                <strong>键位</strong>
+                <div class="keys">
+                  <span class="keycap">Up</span>
+                  <span class="keycap">Down</span>
+                </div>
+              </div>
+              <div>
+                <strong>作用</strong>
+                按当前输入内容搜索命令历史
+              </div>
+              <div>
+                <strong>来源</strong>
+                <a class="source-link" href="https://fishshell.com/docs/2.2/index.html" target="_blank" rel="noreferrer">Fish 文档</a>
+              </div>
+              <div>
+                <strong>备注</strong>
+                如果命令行为空，就是普通历史浏览；有前缀时会按前缀过滤。
+              </div>
+            </article>
+
+            <article class="shortcut-row">
+              <div>
+                <strong>键位</strong>
+                <div class="keys">
+                  <span class="keycap">Alt+Up</span>
+                  <span class="keycap">Alt+Down</span>
+                </div>
+              </div>
+              <div>
+                <strong>作用</strong>
+                按当前 token 搜索历史
+              </div>
+              <div>
+                <strong>来源</strong>
+                <a class="source-link" href="https://fishshell.com/docs/2.2/index.html" target="_blank" rel="noreferrer">Fish 文档</a>
+              </div>
+              <div>
+                <strong>备注</strong>
+                比整行历史搜索更细，适合反复回用某个子命令或路径片段。
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="group catalog-item" data-kind="keyboard">
+          <div class="group-header">
+            <div>
+              <h3>fzf 键盘集成</h3>
+              <p><code>Terminal-setup</code> 里最明确的一组快捷键就是 fzf。仓库 README 直接写了三条主入口，fzf 官方 README 则补齐了 Fish 环境下的二级操作。</p>
+            </div>
+            <div class="chipset">
+              <span class="chip chip-green">仓库直出</span>
+              <span class="chip chip-amber">上游默认补充</span>
+            </div>
+          </div>
+          <div class="group-body">
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+R</span></div></div>
+              <div><strong>作用</strong>模糊搜索历史命令并插回命令行</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>这是仓库 README 明确点名的第一条快捷键。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+R</span><span class="keycap">再次按</span></div></div>
+              <div><strong>作用</strong>在“相关性排序 / 时间顺序”之间切换</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>当你记得命令的大概位置时尤其好用。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+R</span></div></div>
+              <div><strong>作用</strong>在历史搜索里切换 raw mode</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>raw mode 会更容易看到匹配项周围的上下文。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+N</span><span class="keycap">Ctrl+P</span></div></div>
+              <div><strong>作用</strong>在 raw mode 中只在命中的项目之间移动</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>Fish 下的 Ctrl+R 二级导航动作。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+/</span><span class="keycap">Alt+/</span></div></div>
+              <div><strong>作用</strong>切换历史搜索结果自动换行</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>长命令很多时非常实用。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Shift+Delete</span></div></div>
+              <div><strong>作用</strong>删除历史搜索中选中的命令</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>这是 Fish shell only 行为。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+Enter</span></div></div>
+              <div><strong>作用</strong>重新格式化并插入选中的历史命令</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>Fish shell only 行为。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+T</span></div></div>
+              <div><strong>作用</strong>循环切换历史前缀显示方式</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>在时间戳、日期时间、无前缀之间切换。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+T</span></div></div>
+              <div><strong>作用</strong>模糊查找文件并粘回命令行</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>仓库把后端显式改成了 <code>fd --type f --hidden --follow --exclude .git</code>。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+C</span></div></div>
+              <div><strong>作用</strong>模糊进入目录</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
+              <div><strong>备注</strong>仓库把目录列表后端显式改成了 <code>fd --type d --hidden --follow --exclude .git</code>。</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="group catalog-item" data-kind="keyboard">
+          <div class="group-header">
+            <div>
+              <h3>delta 基础翻页</h3>
+              <p>仓库 README 对 <code>git-delta</code> 的键位只明确提到了最常用的一组，所以这里也只保留最核心的两条。</p>
+            </div>
+            <div class="chipset">
+              <span class="chip chip-green">仓库直出</span>
+            </div>
+          </div>
+          <div class="group-body">
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">n</span></div></div>
+              <div><strong>作用</strong>跳到下一个文件 diff</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/liyongzheng666/Terminal-setup/blob/main/README.md" target="_blank" rel="noreferrer">仓库 README</a></div>
+              <div><strong>备注</strong>这是 README 在 delta 说明里唯一明确提到的内置键位。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">N</span></div></div>
+              <div><strong>作用</strong>跳到上一个文件 diff</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/liyongzheng666/Terminal-setup/blob/main/README.md" target="_blank" rel="noreferrer">仓库 README</a></div>
+              <div><strong>备注</strong>与 <code>n</code> 组成最基础的一前一后浏览。</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="group catalog-item" data-kind="keyboard">
+          <div class="group-header">
+            <div>
+              <h3>Lazygit 基础上手键位</h3>
+              <p>这里挑的是这套 Fish 路线里最值得先背的一层。它们跨 panel 复用率很高，背下来就足够开始日常 commit、checkout、stash、pull/push。</p>
+            </div>
+            <div class="chipset">
+              <span class="chip chip-amber">上游默认</span>
+            </div>
+          </div>
+          <div class="group-body">
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">q</span></div></div>
+              <div><strong>作用</strong>退出 lazygit</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>如果你配置了切换目录退出逻辑，<code>Shift+Q</code> 可以绕开它。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">?</span></div></div>
+              <div><strong>作用</strong>打开键位菜单</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>不确定时先按这个。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">/</span></div></div>
+              <div><strong>作用</strong>搜索或过滤当前视图</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>大多数列表面板都支持。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Esc</span></div></div>
+              <div><strong>作用</strong>取消 / 返回上一层</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>在复制 cherry-pick 选择、确认框、详情视图里都很常用。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Space</span></div></div>
+              <div><strong>作用</strong>Stage / Checkout / Toggle</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>语义跟 panel 有关，但都是“对当前选中项做主要切换动作”。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Enter</span></div></div>
+              <div><strong>作用</strong>确认 / 打开详情 / 进入文件</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>另一个“跨 panel 复用”的万能主键。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">p</span><span class="keycap">P</span></div></div>
+              <div><strong>作用</strong>Pull / Push</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>一个小写拉、一个大写推，最容易记。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">z</span><span class="keycap">Z</span></div></div>
+              <div><strong>作用</strong>Undo / Redo</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>基于 reflog；不包括 working tree 里的普通编辑。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Tab</span></div></div>
+              <div><strong>作用</strong>在 staged / unstaged 等视图之间切换</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>在 main panel 和文件相关视图里非常常见。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">n</span><span class="keycap">N</span></div></div>
+              <div><strong>作用</strong>新建分支 / 把未推送 commits 移到新分支</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong><code>N</code> 尤其适合“忘了先切新分支”的补救。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">w</span></div></div>
+              <div><strong>作用</strong>查看 worktree 相关动作</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a></div>
+              <div><strong>备注</strong>在 branch / commit / stash 等多个视图里可用。</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="group catalog-item" data-kind="keyboard">
+          <div class="group-header">
+            <div>
+              <h3>btop 基础导航</h3>
+              <p>这里采用的是 btop 官方 README 里的 help-menu 信息。因为 btop 版本不同，个别细节可能略有变化，所以如果发现不一致，进入 btop 后先按 <code>F1</code> 或 <code>h</code> 看当前版本内置帮助。</p>
+            </div>
+            <div class="chipset">
+              <span class="chip chip-amber">上游 help-menu</span>
+              <span class="chip chip-rose">版本差异需以程序内帮助为准</span>
+            </div>
+          </div>
+          <div class="group-body">
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Esc</span><span class="keycap">m</span></div></div>
+              <div><strong>作用</strong>切换主菜单</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>最核心的入口键。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">p</span></div></div>
+              <div><strong>作用</strong>循环切换视图 preset</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>适合快速切工作模式。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">1</span><span class="keycap">2</span><span class="keycap">3</span><span class="keycap">4</span></div></div>
+              <div><strong>作用</strong>切换 CPU / MEM / NET / PROC box</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>最常用的一组 show/hide 键。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">5</span><span class="keycap">6</span><span class="keycap">7</span><span class="keycap">0</span></div></div>
+              <div><strong>作用</strong>显示 / 隐藏 GPU 监控 box</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md" target="_blank" rel="noreferrer">btop README News</a></div>
+              <div><strong>备注</strong>这是 README 在 GPU 功能说明里单独补充的键位。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">d</span></div></div>
+              <div><strong>作用</strong>切换 MEM box 的 disks 视图</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>磁盘视图常用入口。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">F2</span><span class="keycap">o</span></div></div>
+              <div><strong>作用</strong>打开 options</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>如果想调刷新率、图形样式、显示项，从这里进。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">F1</span><span class="keycap">h</span></div></div>
+              <div><strong>作用</strong>打开帮助窗口</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>遇到版本差异时以这里为准。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">q</span><span class="keycap">Ctrl+C</span></div></div>
+              <div><strong>作用</strong>退出 btop</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>最稳的是直接记 <code>q</code>。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Up</span><span class="keycap">Down</span></div></div>
+              <div><strong>作用</strong>选择进程</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>最基础的进程浏览键。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Enter</span></div></div>
+              <div><strong>作用</strong>查看选中进程的详细信息</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>进入 detail 后，操作会更聚焦到当前进程。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Space</span></div></div>
+              <div><strong>作用</strong>在 tree view 中展开 / 折叠选中进程</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>只有开了进程树视图才明显。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">PgUp</span><span class="keycap">PgDn</span><span class="keycap">Home</span><span class="keycap">End</span></div></div>
+              <div><strong>作用</strong>分页跳转 / 到顶部 / 到底部</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>进程多的时候非常节省时间。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Left</span><span class="keycap">Right</span></div></div>
+              <div><strong>作用</strong>切换前一个 / 后一个排序列</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>搭配 <code>r</code> 反向排序一起记最好。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">b</span><span class="keycap">n</span></div></div>
+              <div><strong>作用</strong>切换上一个 / 下一个网络设备</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>看多网卡机器时很好用。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">a</span><span class="keycap">y</span><span class="keycap">z</span></div></div>
+              <div><strong>作用</strong>网络图自动缩放 / 同步缩放 / 重置 totals</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>属于网络视图常用三件套。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">f</span><span class="keycap">Delete</span></div></div>
+              <div><strong>作用</strong>进入进程过滤 / 清空过滤</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>要定位某个进程名时最实用。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">c</span><span class="keycap">r</span><span class="keycap">e</span></div></div>
+              <div><strong>作用</strong>切 per-core CPU / 反向排序 / 进程树视图</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>这是进程分析最常用的一组三连。</div>
+            </article>
+
+            <article class="shortcut-row">
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Selected t</span><span class="keycap">Selected k</span><span class="keycap">Selected s</span></div></div>
+              <div><strong>作用</strong>对选中进程发送 TERM / KILL / 自定义信号</div>
+              <div><strong>来源</strong><a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md#help-menu" target="_blank" rel="noreferrer">btop README</a></div>
+              <div><strong>备注</strong>只在有进程被选中时有意义，操作前先确认 PID。</div>
+            </article>
+          </div>
+          <div class="note-row">
+            <strong>补充：</strong>help-menu 里还列了刷新间隔、后台挂起等键位。对多数日常使用来说，上面这组已经覆盖了 90% 的高频动作。
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="commands" class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>命令型捷径</h2>
+          <p>这部分不是“按键”，但在 Fish 方案里一样值得背，因为仓库是用 <code>abbr</code> 和轻量函数来提速的。实际用起来，它们和快捷键一样高频。</p>
+        </div>
+      </div>
+
+      <div class="command-grid">
+        <article class="command-card catalog-item" data-kind="command">
+          <h3>Fish Abbreviations</h3>
+          <p>这些都是仓库直接写进 <code>config.fish</code> 的缩写。它们会在交互式 shell 中自动展开。</p>
+          <div class="command-list">
+            <div class="command-item">
+              <code>ls</code>
+              <span>展开为 <code>eza --icons --group-directories-first</code></span>
+              <button class="copy-chip" data-copy="ls">复制</button>
+            </div>
+            <div class="command-item">
+              <code>ll</code>
+              <span>展开为 <code>eza -la --icons --group-directories-first</code></span>
+              <button class="copy-chip" data-copy="ll">复制</button>
+            </div>
+            <div class="command-item">
+              <code>lt</code>
+              <span>展开为 <code>eza --tree --icons --level=2</code></span>
+              <button class="copy-chip" data-copy="lt">复制</button>
+            </div>
+            <div class="command-item">
+              <code>cat</code>
+              <span>展开为 <code>bat</code></span>
+              <button class="copy-chip" data-copy="cat">复制</button>
+            </div>
+            <div class="command-item">
+              <code>find</code>
+              <span>展开为 <code>fd</code></span>
+              <button class="copy-chip" data-copy="find">复制</button>
+            </div>
+            <div class="command-item">
+              <code>grep</code>
+              <span>展开为 <code>rg</code></span>
+              <button class="copy-chip" data-copy="grep">复制</button>
+            </div>
+            <div class="command-item">
+              <code>top</code>
+              <span>展开为 <code>btop</code></span>
+              <button class="copy-chip" data-copy="top">复制</button>
+            </div>
+            <div class="command-item">
+              <code>lg</code>
+              <span>展开为 <code>lazygit</code></span>
+              <button class="copy-chip" data-copy="lg">复制</button>
+            </div>
+            <div class="command-item">
+              <code>cd</code>
+              <span>展开为 <code>z</code>，把目录跳转交给 zoxide</span>
+              <button class="copy-chip" data-copy="cd">复制</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="command-card catalog-item" data-kind="command">
+          <h3>zoxide / fnm / SSH 切换</h3>
+          <p>这组不是按键映射，但它们是 Fish 方案里真正提升效率的“输入式快捷入口”。</p>
+          <div class="command-list">
+            <div class="command-item">
+              <code>z proj</code>
+              <span>按模糊关键字跳到最常用目录；README 例子是 <code>z proj</code> / <code>z doc</code></span>
+              <button class="copy-chip" data-copy="z proj">复制</button>
+            </div>
+            <div class="command-item">
+              <code>zi</code>
+              <span>调用 zoxide 的交互式目录选择</span>
+              <button class="copy-chip" data-copy="zi">复制</button>
+            </div>
+            <div class="command-item">
+              <code>fnm install --lts</code>
+              <span>安装最新 LTS Node；Fish 里用 <code>fnm env --use-on-cd --shell fish</code> 接入自动切换</span>
+              <button class="copy-chip" data-copy="fnm install --lts">复制</button>
+            </div>
+            <div class="command-item">
+              <code>fnm use 22</code>
+              <span>当前 shell 切到 Node 22；配合 <code>.node-version</code> 可自动切</span>
+              <button class="copy-chip" data-copy="fnm use 22">复制</button>
+            </div>
+            <div class="command-item">
+              <code>set-ssh-key my-key-name</code>
+              <span>清空 agent 并载入指定私钥；仓库在 Fish 配置里内置了这个函数</span>
+              <button class="copy-chip" data-copy="set-ssh-key my-key-name">复制</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>装了，但不需要背额外快捷键</h2>
+          <p>这些组件确实属于这套 Fish 技术选型，但仓库没有再给它们叠一层额外键位，所以不用硬记“快捷键表”。</p>
+        </div>
+      </div>
+      <div class="none-grid">
+        <article class="none-card catalog-item" data-kind="none">
+          <h3>Ghostty</h3>
+          <p>仓库只提供主题、字体、字号和窗口 padding 配置，没有自定义 Ghostty keybindings。</p>
+        </article>
+        <article class="none-card catalog-item" data-kind="none">
+          <h3>Starship</h3>
+          <p>它负责 prompt 外观，不负责按键交互；这套方案只是把它初始化到 Fish 里。</p>
+        </article>
+        <article class="none-card catalog-item" data-kind="none">
+          <h3>bat / eza / fd / rg / jq / tldr</h3>
+          <p>它们是命令替代工具，不是 TUI，因此更该记的是命令名或 abbr，而不是按键。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="sources" class="panel section">
+      <div class="section-head">
+        <div>
+          <h2>来源与校验路径</h2>
+          <p>这页不是凭常识瞎写的。我把仓库里的 README、<code>config.fish</code>、安装脚本，以及上游工具的官方文档和键位表交叉核对后再落表。</p>
+        </div>
+      </div>
+      <div class="source-grid">
+        <article class="source-card catalog-item" data-kind="source">
+          <h3>Terminal-setup 仓库本体</h3>
+          <p>用于确认 Fish 路线实际接入了什么、哪些键位是仓库直接写明的、Fish <code>abbr</code> 和 <code>config.fish</code> 里到底做了哪些初始化。</p>
+          <div class="chipset">
+            <a class="source-link" href="https://github.com/liyongzheng666/Terminal-setup/blob/main/README_CN.md" target="_blank" rel="noreferrer">README_CN.md</a>
+            <a class="source-link" href="https://github.com/liyongzheng666/Terminal-setup/blob/main/README.md" target="_blank" rel="noreferrer">README.md</a>
+            <a class="source-link" href="https://github.com/liyongzheng666/Terminal-setup/blob/main/configs/config.fish" target="_blank" rel="noreferrer">configs/config.fish</a>
+            <a class="source-link" href="https://github.com/liyongzheng666/Terminal-setup/blob/main/setup.sh" target="_blank" rel="noreferrer">setup.sh</a>
+          </div>
+        </article>
+
+        <article class="source-card catalog-item" data-kind="source">
+          <h3>Fish / fzf 官方文档</h3>
+          <p>用于补齐 Fish 原生 autosuggestion / history 搜索键位，以及仓库 README 只列了三条但实际还存在的 fzf 二级操作。</p>
+          <div class="chipset">
+            <a class="source-link" href="https://fishshell.com/docs/3.0/" target="_blank" rel="noreferrer">Fish 文档</a>
+            <a class="source-link" href="https://fishshell.com/docs/2.2/index.html" target="_blank" rel="noreferrer">Fish 历史搜索文档</a>
+            <a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a>
+          </div>
+        </article>
+
+        <article class="source-card catalog-item" data-kind="source">
+          <h3>lazygit / btop 官方键位材料</h3>
+          <p>lazygit 用官方英文键位表；btop 用官方 README 里的 help-menu 和 README 内的 GPU 键位说明。btop 如果版本不同，请以程序内帮助为准。</p>
+          <div class="chipset">
+            <a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/docs/keybindings/Keybindings_en.md" target="_blank" rel="noreferrer">Lazygit Keybindings</a>
+            <a class="source-link" href="https://github.com/jesseduffield/lazygit/blob/master/README.md" target="_blank" rel="noreferrer">Lazygit README</a>
+            <a class="source-link" href="https://github.com/aristocratos/btop/blob/main/README.md" target="_blank" rel="noreferrer">btop README</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      这页的目标不是把终端世界里所有东西都塞进来，而是把
+      <a href="https://github.com/liyongzheng666/Terminal-setup/blob/main/README_CN.md" target="_blank" rel="noreferrer">Terminal-setup</a>
+      仓库里 <strong>Fish 这一条技术路线</strong> 真的会用到的快捷入口整理成一张能发给别人直接看的页面。
+      如果你要继续扩展下一版，最自然的增量是：补一页 <code>Zellij</code>（如果你也采用它），或者再做一版 <code>Zsh</code> 路线对照表。
+    </footer>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const items = document.querySelectorAll(".catalog-item");
+    const copyButtons = document.querySelectorAll(".copy-chip");
+    let currentFilter = "all";
+
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      items.forEach((item) => {
+        const kind = item.dataset.kind || "";
+        const kindMatch = currentFilter === "all" || kind === currentFilter;
+        const textMatch = !query || item.innerText.toLowerCase().includes(query);
+        item.classList.toggle("hidden", !(kindMatch && textMatch));
+      });
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
+        filterButtons.forEach((btn) => btn.classList.toggle("active", btn === button));
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const value = button.dataset.copy || "";
+        try {
+          await navigator.clipboard.writeText(value);
+          const old = button.textContent;
+          button.textContent = "已复制";
+          setTimeout(() => {
+            button.textContent = old;
+          }, 900);
+        } catch {
+          button.textContent = "复制失败";
+          setTimeout(() => {
+            button.textContent = "复制";
+          }, 900);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
