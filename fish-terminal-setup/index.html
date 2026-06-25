@@ -742,7 +742,7 @@
       <div class="summary-grid">
         <article class="summary-card catalog-item" data-kind="scope">
           <h3>1. 这不是 Oh My Fish 套餐</h3>
-          <p>仓库的 Fish 配置只在 <code>config.fish</code> 里初始化 <code>starship</code>、<code>fnm</code>、<code>zoxide</code>、<code>fzf</code>，并追加一组 Fish <code>abbr</code>。没有 <code>fisher</code>、<code>oh-my-fish</code> 或额外 Fish 插件仓库。</p>
+          <p>本机的 <code>config.fish</code> 只初始化 <code>starship</code>、<code>fnm</code>、<code>zoxide</code>、<code>fzf</code>，再加一个 <code>set-ssh-key</code> 函数。没有 <code>fisher</code>、<code>oh-my-fish</code> 或额外 Fish 插件仓库，<strong>当前也没有定义任何 <code>abbr</code></strong>。</p>
           <div class="chipset">
             <span class="chip chip-green">仓库直出</span>
             <span class="chip chip-amber">零插件管理器</span>
@@ -760,7 +760,7 @@
 
         <article class="summary-card catalog-item" data-kind="scope">
           <h3>3. zoxide / abbr 更像“输入式快捷入口”</h3>
-          <p><code>z proj</code>、<code>zi</code>、<code>ls</code>→<code>eza</code>、<code>lg</code>→<code>lazygit</code> 这种更适合归类为 typed shortcuts。它们不是按键映射，但在日常使用里同样应该背。</p>
+          <p><code>z proj</code>、<code>zi</code> 这类 zoxide 跳转是本机真实可用的 typed shortcuts。而 <code>ls</code>→<code>eza</code>、<code>lg</code>→<code>lazygit</code> 这种 <code>abbr</code> 目前并<strong>没有</strong>写进本机 <code>config.fish</code>，属于可选增强。</p>
           <div class="chipset">
             <span class="chip chip-amber">命令捷径</span>
             <span class="chip chip-green">Fish abbr</span>
@@ -798,7 +798,7 @@
 
         <article class="inventory-card catalog-item" data-kind="inventory">
           <h3>zoxide</h3>
-          <p>仓库显式执行 <code>zoxide init fish | source</code>，并把 <code>cd</code> 写成了 <code>abbr -a cd "z"</code>。更像命令捷径，而不是键位。</p>
+          <p>本机显式执行 <code>zoxide init fish | source</code>，所以 <code>z</code>、<code>zi</code> 跳转可用。但并没有把 <code>cd</code> 改写成 <code>abbr -a cd "z"</code>，<code>cd</code> 仍是原生命令。</p>
           <div class="chipset">
             <span class="chip chip-amber">命令捷径</span>
             <span class="chip chip-green">仓库直出</span>
@@ -807,10 +807,10 @@
 
         <article class="inventory-card catalog-item" data-kind="inventory">
           <h3>Fish Abbreviations</h3>
-          <p>仓库把 <code>ls</code>、<code>ll</code>、<code>lt</code>、<code>cat</code>、<code>find</code>、<code>grep</code>、<code>top</code>、<code>lg</code>、<code>cd</code> 全部写成了 Fish <code>abbr</code>。</p>
+          <p>这台 Mac 当前的 <code>config.fish</code> 其实<strong>没有</strong>定义任何 <code>abbr</code>（<code>abbr -l</code> 为空）。<code>eza</code>、<code>bat</code>、<code>fd</code>、<code>rg</code>、<code>btop</code>、<code>lazygit</code> 都已安装，但要手动 <code>abbr -a</code> 才会有这些缩写。</p>
           <div class="chipset">
-            <span class="chip chip-amber">命令捷径</span>
-            <span class="chip chip-green">仓库直出</span>
+            <span class="chip chip-amber">可选增强</span>
+            <span class="chip chip-rose">本机未启用</span>
           </div>
         </article>
 
@@ -840,6 +840,10 @@
           <h2>键盘快捷键总表</h2>
           <p>这里收的是“真按键”。搜索框会同时匹配组件名、键位和描述。默认展示仓库 Fish 路线里最值得背的快捷键组。</p>
         </div>
+      </div>
+
+      <div class="note-row">
+        <strong>⌥ macOS 提示：</strong>这台机器是 Mac，键盘上没有写着 “Alt” 的键。本页凡是写作 <code>Alt</code> 的键位（这是 fzf / Fish 上游文档的叫法），在你的 Mac 上都对应 <strong>⌥ Option</strong> 键，下面也已统一标成 <code>⌥</code>。注意 Ghostty 默认不会把 Option 当成 Alt 发送，所以这些 <code>⌥</code> 键位要先在 Ghostty 配置里设 <code>macos-option-as-alt = true</code>（本机当前还没有 <code>~/.config/ghostty</code> 配置）才会真正生效。
       </div>
 
       <div class="toolbar">
@@ -889,8 +893,8 @@
               <div>
                 <strong>键位</strong>
                 <div class="keys">
-                  <span class="keycap">Alt+Right</span>
-                  <span class="keycap">Alt+F</span>
+                  <span class="keycap">⌥ Right</span>
+                  <span class="keycap">⌥ F</span>
                 </div>
               </div>
               <div>
@@ -933,8 +937,8 @@
               <div>
                 <strong>键位</strong>
                 <div class="keys">
-                  <span class="keycap">Alt+Up</span>
-                  <span class="keycap">Alt+Down</span>
+                  <span class="keycap">⌥ Up</span>
+                  <span class="keycap">⌥ Down</span>
                 </div>
               </div>
               <div>
@@ -980,7 +984,7 @@
             </article>
 
             <article class="shortcut-row">
-              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+R</span></div></div>
+              <div><strong>键位</strong><div class="keys"><span class="keycap">⌥ R</span></div></div>
               <div><strong>作用</strong>在历史搜索里切换 raw mode</div>
               <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
               <div><strong>备注</strong>raw mode 会更容易看到匹配项周围的上下文。</div>
@@ -994,7 +998,7 @@
             </article>
 
             <article class="shortcut-row">
-              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+/</span><span class="keycap">Alt+/</span></div></div>
+              <div><strong>键位</strong><div class="keys"><span class="keycap">Ctrl+/</span><span class="keycap">⌥ /</span></div></div>
               <div><strong>作用</strong>切换历史搜索结果自动换行</div>
               <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
               <div><strong>备注</strong>长命令很多时非常实用。</div>
@@ -1008,14 +1012,14 @@
             </article>
 
             <article class="shortcut-row">
-              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+Enter</span></div></div>
+              <div><strong>键位</strong><div class="keys"><span class="keycap">⌥ Enter</span></div></div>
               <div><strong>作用</strong>重新格式化并插入选中的历史命令</div>
               <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
               <div><strong>备注</strong>Fish shell only 行为。</div>
             </article>
 
             <article class="shortcut-row">
-              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+T</span></div></div>
+              <div><strong>键位</strong><div class="keys"><span class="keycap">⌥ T</span></div></div>
               <div><strong>作用</strong>循环切换历史前缀显示方式</div>
               <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
               <div><strong>备注</strong>在时间戳、日期时间、无前缀之间切换。</div>
@@ -1029,7 +1033,7 @@
             </article>
 
             <article class="shortcut-row">
-              <div><strong>键位</strong><div class="keys"><span class="keycap">Alt+C</span></div></div>
+              <div><strong>键位</strong><div class="keys"><span class="keycap">⌥ C</span></div></div>
               <div><strong>作用</strong>模糊进入目录</div>
               <div><strong>来源</strong><a class="source-link" href="https://github.com/junegunn/fzf/blob/master/README.md" target="_blank" rel="noreferrer">fzf README</a></div>
               <div><strong>备注</strong>仓库把目录列表后端显式改成了 <code>fd --type d --hidden --follow --exclude .git</code>。</div>
@@ -1309,53 +1313,53 @@
 
       <div class="command-grid">
         <article class="command-card catalog-item" data-kind="command">
-          <h3>Fish Abbreviations</h3>
-          <p>这些都是仓库直接写进 <code>config.fish</code> 的缩写。它们会在交互式 shell 中自动展开。</p>
+          <h3>Fish Abbreviations（可选 · 本机未启用）</h3>
+          <p>⚠️ 这些缩写当前<strong>没有</strong>写进本机 <code>config.fish</code>（<code>abbr -l</code> 为空）。底层工具都已安装，下面列的是「如果想启用」可以加进 <code>config.fish</code> 的 <code>abbr -a</code> 命令——点「复制」即可拿到整条；现在不加也行，直接敲 <code>eza</code> / <code>bat</code> / <code>lazygit</code> 等原命令即可。</p>
           <div class="command-list">
             <div class="command-item">
               <code>ls</code>
               <span>展开为 <code>eza --icons --group-directories-first</code></span>
-              <button class="copy-chip" data-copy="ls">复制</button>
+              <button class="copy-chip" data-copy="abbr -a ls 'eza --icons --group-directories-first'">复制</button>
             </div>
             <div class="command-item">
               <code>ll</code>
               <span>展开为 <code>eza -la --icons --group-directories-first</code></span>
-              <button class="copy-chip" data-copy="ll">复制</button>
+              <button class="copy-chip" data-copy="abbr -a ll 'eza -la --icons --group-directories-first'">复制</button>
             </div>
             <div class="command-item">
               <code>lt</code>
               <span>展开为 <code>eza --tree --icons --level=2</code></span>
-              <button class="copy-chip" data-copy="lt">复制</button>
+              <button class="copy-chip" data-copy="abbr -a lt 'eza --tree --icons --level=2'">复制</button>
             </div>
             <div class="command-item">
               <code>cat</code>
               <span>展开为 <code>bat</code></span>
-              <button class="copy-chip" data-copy="cat">复制</button>
+              <button class="copy-chip" data-copy="abbr -a cat 'bat'">复制</button>
             </div>
             <div class="command-item">
               <code>find</code>
               <span>展开为 <code>fd</code></span>
-              <button class="copy-chip" data-copy="find">复制</button>
+              <button class="copy-chip" data-copy="abbr -a find 'fd'">复制</button>
             </div>
             <div class="command-item">
               <code>grep</code>
               <span>展开为 <code>rg</code></span>
-              <button class="copy-chip" data-copy="grep">复制</button>
+              <button class="copy-chip" data-copy="abbr -a grep 'rg'">复制</button>
             </div>
             <div class="command-item">
               <code>top</code>
               <span>展开为 <code>btop</code></span>
-              <button class="copy-chip" data-copy="top">复制</button>
+              <button class="copy-chip" data-copy="abbr -a top 'btop'">复制</button>
             </div>
             <div class="command-item">
               <code>lg</code>
               <span>展开为 <code>lazygit</code></span>
-              <button class="copy-chip" data-copy="lg">复制</button>
+              <button class="copy-chip" data-copy="abbr -a lg 'lazygit'">复制</button>
             </div>
             <div class="command-item">
               <code>cd</code>
               <span>展开为 <code>z</code>，把目录跳转交给 zoxide</span>
-              <button class="copy-chip" data-copy="cd">复制</button>
+              <button class="copy-chip" data-copy="abbr -a cd 'z'">复制</button>
             </div>
           </div>
         </article>
@@ -1404,7 +1408,7 @@
       <div class="none-grid">
         <article class="none-card catalog-item" data-kind="none">
           <h3>Ghostty</h3>
-          <p>仓库只提供主题、字体、字号和窗口 padding 配置，没有自定义 Ghostty keybindings。</p>
+          <p>仓库给出过主题、字体、字号和窗口 padding 配置，但本机当前还没有 <code>~/.config/ghostty</code> 配置文件，也没有自定义 Ghostty keybindings。Mac 上若要让本页的 <code>⌥</code> 键位生效，需要在这里加 <code>macos-option-as-alt = true</code>。</p>
         </article>
         <article class="none-card catalog-item" data-kind="none">
           <h3>Starship</h3>
