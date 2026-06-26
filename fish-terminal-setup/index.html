@@ -742,7 +742,7 @@
       <div class="summary-grid">
         <article class="summary-card catalog-item" data-kind="scope">
           <h3>1. 这不是 Oh My Fish 套餐</h3>
-          <p>本机的 <code>config.fish</code> 只初始化 <code>starship</code>、<code>fnm</code>、<code>zoxide</code>、<code>fzf</code>，再加一个 <code>set-ssh-key</code> 函数。没有 <code>fisher</code>、<code>oh-my-fish</code> 或额外 Fish 插件仓库，<strong>当前也没有定义任何 <code>abbr</code></strong>。</p>
+          <p>本机的 <code>config.fish</code> 只初始化 <code>starship</code>、<code>fnm</code>、<code>zoxide</code>、<code>fzf</code>，再加一个 <code>set-ssh-key</code> 函数。没有 <code>fisher</code>、<code>oh-my-fish</code> 或额外 Fish 插件仓库；另<strong>已启用 8 个 Fish <code>abbr</code></strong>（仓库默认的 <code>cd</code>→<code>z</code> 按个人选择省略）。</p>
           <div class="chipset">
             <span class="chip chip-green">仓库直出</span>
             <span class="chip chip-amber">零插件管理器</span>
@@ -760,7 +760,7 @@
 
         <article class="summary-card catalog-item" data-kind="scope">
           <h3>3. zoxide / abbr 更像“输入式快捷入口”</h3>
-          <p><code>z proj</code>、<code>zi</code> 这类 zoxide 跳转是本机真实可用的 typed shortcuts。而 <code>ls</code>→<code>eza</code>、<code>lg</code>→<code>lazygit</code> 这种 <code>abbr</code> 目前并<strong>没有</strong>写进本机 <code>config.fish</code>，属于可选增强。</p>
+          <p><code>z proj</code>、<code>zi</code> 这类 zoxide 跳转是本机真实可用的 typed shortcuts。<code>ls</code>→<code>eza</code>、<code>lg</code>→<code>lazygit</code> 这 8 个 <code>abbr</code> 也已写进本机 <code>config.fish</code> 并生效；只有 <code>cd</code>→<code>z</code> 按个人选择没启用，<code>cd</code> 保持原生。</p>
           <div class="chipset">
             <span class="chip chip-amber">命令捷径</span>
             <span class="chip chip-green">Fish abbr</span>
@@ -807,10 +807,10 @@
 
         <article class="inventory-card catalog-item" data-kind="inventory">
           <h3>Fish Abbreviations</h3>
-          <p>这台 Mac 当前的 <code>config.fish</code> 其实<strong>没有</strong>定义任何 <code>abbr</code>（<code>abbr -l</code> 为空）。<code>eza</code>、<code>bat</code>、<code>fd</code>、<code>rg</code>、<code>btop</code>、<code>lazygit</code> 都已安装，但要手动 <code>abbr -a</code> 才会有这些缩写。</p>
+          <p>本机已启用 <strong>8 个</strong> <code>abbr</code>：<code>ls</code> / <code>ll</code> / <code>lt</code>→<code>eza</code>、<code>cat</code>→<code>bat</code>、<code>find</code>→<code>fd</code>、<code>grep</code>→<code>rg</code>、<code>top</code>→<code>btop</code>、<code>lg</code>→<code>lazygit</code>（<code>abbr -l</code> 可见）。仓库默认还有 <code>cd</code>→<code>z</code>，这台机器按个人选择没启用。</p>
           <div class="chipset">
-            <span class="chip chip-amber">可选增强</span>
-            <span class="chip chip-rose">本机未启用</span>
+            <span class="chip chip-green">已启用 8 个</span>
+            <span class="chip chip-amber">cd→z 省略</span>
           </div>
         </article>
 
@@ -1313,8 +1313,8 @@
 
       <div class="command-grid">
         <article class="command-card catalog-item" data-kind="command">
-          <h3>Fish Abbreviations（可选 · 本机未启用）</h3>
-          <p>⚠️ 这些缩写当前<strong>没有</strong>写进本机 <code>config.fish</code>（<code>abbr -l</code> 为空）。底层工具都已安装，下面列的是「如果想启用」可以加进 <code>config.fish</code> 的 <code>abbr -a</code> 命令——点「复制」即可拿到整条；现在不加也行，直接敲 <code>eza</code> / <code>bat</code> / <code>lazygit</code> 等原命令即可。</p>
+          <h3>Fish Abbreviations（已启用 8 个）</h3>
+          <p>下面前 8 个缩写已经写进本机 <code>config.fish</code> 并生效；最后一个 <code>cd</code>→<code>z</code> 按个人选择<strong>没启用</strong>。每个「复制」按钮给的是对应的 <code>abbr -a</code> 整条命令——想增删，或在别的机器上复刻时直接拿来用。</p>
           <div class="command-list">
             <div class="command-item">
               <code>ls</code>
@@ -1358,7 +1358,7 @@
             </div>
             <div class="command-item">
               <code>cd</code>
-              <span>展开为 <code>z</code>，把目录跳转交给 zoxide</span>
+              <span>展开为 <code>z</code>，把目录跳转交给 zoxide（本机<strong>未启用</strong>；想要就复制右侧命令添加）</span>
               <button class="copy-chip" data-copy="abbr -a cd 'z'">复制</button>
             </div>
           </div>
